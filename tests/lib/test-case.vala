@@ -240,6 +240,7 @@ public abstract class Folks.TestCase : Object
       this._suite.add (add_test_helper (name, test));
     }
 
+<<<<<<< HEAD
   /* implemented in test-case-helper.c */
   internal extern GLib.TestCase add_test_helper (string name, TestMethod test);
 
@@ -262,6 +263,13 @@ public abstract class Folks.TestCase : Object
    * as the last thing in their implementation.
    */
   public virtual void tear_down ()
+=======
+  public virtual async void set_up ()
+    {
+    }
+
+  public virtual async void tear_down ()
+>>>>>>> dummy: UNFINISHED work to document backend and port tests to it
     {
     }
 
@@ -296,7 +304,11 @@ public abstract class Folks.TestCase : Object
         }
     }
 
+<<<<<<< HEAD
   ~TestCase ()
+=======
+  private class Adaptor
+>>>>>>> dummy: UNFINISHED work to document backend and port tests to it
     {
       this.final_tear_down ();
     }
@@ -309,8 +321,28 @@ public abstract class Folks.TestCase : Object
 
       public static void set_up ()
         {
+<<<<<<< HEAD
           GLib.set_printerr_handler (LogAdaptor._printerr_func_stack_trace);
           Log.set_default_handler (LogAdaptor._log_func_stack_trace);
+=======
+          GLib.set_printerr_handler (Adaptor._printerr_func_stack_trace);
+          Log.set_default_handler (this._log_func_stack_trace);
+
+          var main_loop = new MainLoop ();
+
+          Idle.add (() =>
+            {
+              this._test_case.set_up.begin ((s, r) =>
+                {
+                  this._test_case.set_up.end (r);
+                  main_loop.quit ();
+                });
+
+              return false;
+            });
+
+          main_loop.run ();
+>>>>>>> dummy: UNFINISHED work to document backend and port tests to it
         }
 
       private static void _printerr_func_stack_trace (string? text)
@@ -340,5 +372,31 @@ public abstract class Folks.TestCase : Object
               GLib.on_error_stack_trace ("libtool --mode=execute gdb");
             }
         }
+<<<<<<< HEAD
+=======
+
+      public void run (void* fixture)
+        {
+          this._test ();
+        }
+
+      public void tear_down (void* fixture)
+        {
+          var main_loop = new MainLoop ();
+
+          Idle.add (() =>
+            {
+              this._test_case.tear_down.begin ((s, r) =>
+                {
+                  this._test_case.tear_down.end (r);
+                  main_loop.quit ();
+                });
+
+              return false;
+            });
+
+          main_loop.run ();
+        }
+>>>>>>> dummy: UNFINISHED work to document backend and port tests to it
     }
 }

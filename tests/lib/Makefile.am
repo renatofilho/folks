@@ -1,6 +1,7 @@
 # Build . first so that backends' test libraries can link to libfolks-test.la
 SUBDIRS = \
 	. \
+	dummy \
 	key-file \
 	$(NULL)
 
@@ -27,6 +28,7 @@ SUBDIRS += eds
 endif
 
 DIST_SUBDIRS = \
+	dummy \
 	key-file \
 	telepathy \
 	eds \
@@ -38,6 +40,7 @@ noinst_LTLIBRARIES = libfolks-test.la
 
 libfolks_test_la_SOURCES = \
 	haze-remove-directory.c \
+	normal-test-case.vala \
 	test-case.vala \
 	test-case-helper.c \
 	test-utils.vala \
