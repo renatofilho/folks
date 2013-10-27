@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 Philip Withnall
+ *               2013 Canonical Ltd
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,6 +17,7 @@
  *
  * Authors:
  *       Philip Withnall <philip@tecnocode.co.uk>
+  *      Renato Araujo Oliveira Filho <renato@canonical.com>
  */
 
 using Folks;
@@ -42,6 +44,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
   private bool _prepare_pending = false;
   private bool _is_quiescent = false;
   private bool _quiescent_on_prepare = false;
+  private int  _contact_id = 0;
 
   /**
    * The type of persona store this is.
@@ -302,7 +305,8 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
         }
 
       /* Allow overriding the class used. */
-      var contact_id = "TODO";
+      var contact_id = this._contact_id.to_string();
+      this._contact_id++;
       var uid = Folks.Persona.build_uid (BACKEND_NAME, this.id, contact_id);
       var iid = this.id + ":" + contact_id;
 
@@ -331,116 +335,210 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
           if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.FULL_NAME))
             {
-              string? full_name = v.get_string ();
-              string _full_name = "";
-              if (full_name != null)
-                {
-                  _full_name = (!) full_name;
-                }
-
               var _persona = persona as NameDetails;
-              assert (_persona != null);
-              _persona.full_name = _full_name;
+              if (_persona != null) 
+                {
+                  string? full_name = v.get_string ();
+                  string _full_name = "";
+                  if (full_name != null)
+                    {
+                      _full_name = (!) full_name;
+                    }
+                  _persona.full_name = _full_name;
+                }
             }
-          /* TODO */
-          /*else if (k == Folks.PersonaStore.detail_key (
+          else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.EMAIL_ADDRESSES))
             {
-              Set<EmailFieldDetails> email_addresses =
-                (Set<EmailFieldDetails>) v.get_object ();
-              this._set_contact_attributes_string (contact,
-                  email_addresses,
-                  "EMAIL", E.ContactField.EMAIL);
+              var _persona = persona as EmailDetails;
+              if (_persona != null)
+                {
+                  Set<EmailFieldDetails> email_addresses =
+                      (Set<EmailFieldDetails>) v.get_object ();
+                  if (email_addresses != null)
+                    {
+                      _persona.email_addresses =  email_addresses;
+                    }             
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (PersonaDetail.AVATAR))
             {
-              try
+              var _persona = persona as AvatarDetails;
+              if (_persona != null)
                 {
                   var avatar = (LoadableIcon?) v.get_object ();
-                  yield this._set_contact_avatar (contact, avatar);
-                }
-              catch (PropertyError e1)
-                {
-                  warning ("Couldn't set avatar on the EContact: %s",
-                      e1.message);
+                  if (avatar != null)
+                    {
+                      _persona.avatar = avatar;
+                    }
                 }
             }
           else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.IM_ADDRESSES))
             {
-              var im_fds = (MultiMap<string, ImFieldDetails>) v.get_object ();
-              this._set_contact_im_fds (contact, im_fds);
+              var _persona = persona as ImDetails;
+              if (_persona != null)
+                {
+                  MultiMap<string,ImFieldDetails> im_addresses =
+                    (MultiMap<string,ImFieldDetails>) v.get_object ();
+                  if (im_addresses != null)
+                    {
+                      _persona.im_addresses = im_addresses;
+                    }
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.PHONE_NUMBERS))
             {
-              Set<PhoneFieldDetails> phone_numbers =
-                (Set<PhoneFieldDetails>) v.get_object ();
-              this._set_contact_attributes_string (contact,
-                  phone_numbers, "TEL",
-                  E.ContactField.TEL);
+              var _persona = persona as PhoneDetails;
+              if (_persona != null)
+                {
+                  Set<PhoneFieldDetails> phone_numbers =
+                    (Set<PhoneFieldDetails>) v.get_object ();
+                  if (phone_numbers != null)
+                    {
+                      _persona.phone_numbers = phone_numbers;
+                    }
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.POSTAL_ADDRESSES))
             {
-              Set<PostalAddressFieldDetails> postal_fds =
-                (Set<PostalAddressFieldDetails>) v.get_object ();
-              this._set_contact_postal_addresses (contact, postal_fds);
+              var _persona = persona as PostalAddressDetails;
+              if (_persona != null)
+                {
+                  Set<PostalAddressFieldDetails> postal_fds =
+                    (Set<PostalAddressFieldDetails>) v.get_object ();
+                  if (postal_fds != null)
+                    {
+                      _persona.postal_addresses = postal_fds;
+                    }
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (
                 PersonaDetail.STRUCTURED_NAME))
             {
-              StructuredName sname = (StructuredName) v.get_object ();
-              this._set_contact_name (contact, sname);
+              var _persona = persona as NameDetails;
+              if (_persona != null) 
+                {
+                  StructuredName sname = (StructuredName) v.get_object ();
+                  if (sname != null)
+                    {
+                      _persona.structured_name = sname;
+                    }
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (PersonaDetail.LOCAL_IDS))
             {
-              Set<string> local_ids = (Set<string>) v.get_object ();
-              this._set_contact_local_ids (contact, local_ids);
+              var _persona = persona as LocalIdDetails;
+              if (_persona != null)
+                {
+                  Set<string> local_ids = (Set<string>) v.get_object ();
+                  if (local_ids != null)
+                    {
+                      _persona.local_ids = local_ids;
+                    }
+                }
             }
           else if (k == Folks.PersonaStore.detail_key
               (PersonaDetail.WEB_SERVICE_ADDRESSES))
             {
-              HashMultiMap<string, WebServiceFieldDetails>
-                web_service_addresses =
-                (HashMultiMap<string, WebServiceFieldDetails>) v.get_object ();
-              this._set_contact_web_service_addresses (contact,
-                  web_service_addresses);
+              var _persona = persona as WebServiceDetails;
+              if (_persona != null)
+                {
+                  HashMultiMap<string, WebServiceFieldDetails>
+                    web_service_addresses = 
+                      (HashMultiMap<string, WebServiceFieldDetails>) v.get_object ();
+                  if (web_service_addresses != null)
+                    {
+                      _persona.web_service_addresses = web_service_addresses;
+                    }
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (PersonaDetail.NOTES))
             {
-              var notes = (Gee.HashSet<NoteFieldDetails>) v.get_object ();
-              this._set_contact_notes (contact, notes);
+              var _persona = persona as NoteDetails;
+              if (_persona != null)
+                {
+                  var notes = (Gee.HashSet<NoteFieldDetails>) v.get_object ();
+                  if (notes != null)
+                    {
+                      _persona.notes = notes;
+                    }
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (PersonaDetail.GENDER))
             {
-              var gender = (Gender) v.get_enum ();
-              this._set_contact_gender (contact, gender);
+              var _persona = persona as GenderDetails;
+              if (_persona != null)
+                {
+                  var gender = (Gender) v.get_enum ();
+                  _persona.gender = gender;
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (PersonaDetail.URLS))
             {
-              Set<UrlFieldDetails> urls = (Set<UrlFieldDetails>) v.get_object ();
-              this._set_contact_urls (contact, urls);
+              var _persona = persona as UrlDetails;
+              if (_persona != null)
+                {
+                  Set<UrlFieldDetails> urls = (Set<UrlFieldDetails>) v.get_object ();
+                  if (urls != null)
+                    {
+                      _persona.urls = urls;
+                    }
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (PersonaDetail.BIRTHDAY))
             {
-              var birthday = (DateTime?) v.get_boxed ();
-              this._set_contact_birthday (contact, birthday);
+              var _persona = persona as BirthdayDetails;
+              if (_persona != null)
+                {
+                  var birthday = (DateTime?) v.get_boxed ();
+                  if (birthday != null)
+                    {
+                      _persona.birthday = birthday;
+                    }
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (PersonaDetail.ROLES))
             {
-              Set<RoleFieldDetails> roles =
-                (Set<RoleFieldDetails>) v.get_object ();
-              this._set_contact_roles (contact, roles);
+              var _persona = persona as RoleDetails;
+              if (_persona != null)
+                {
+                  Set<RoleFieldDetails> roles =
+                      (Set<RoleFieldDetails>) v.get_object ();
+                  if (roles != null)
+                    {
+                      _persona.roles = roles;
+                    }
+                }
             }
           else if (k == Folks.PersonaStore.detail_key (
                   PersonaDetail.IS_FAVOURITE))
             {
-              bool is_fav = v.get_boolean ();
-              this._set_contact_is_favourite (contact, is_fav);
-            }*/
+              var _persona = persona as FavouriteDetails;
+              if (_persona != null)
+                {
+                  bool is_fav = v.get_boolean ();
+                  _persona.is_favourite = is_fav;
+                }
+            }
+          else if (k == Folks.PersonaStore.detail_key (
+                   PersonaDetail.NICKNAME))
+            {
+              var _persona = persona as NameDetails;
+              if (_persona != null)
+                {
+                  string? nickname = v.get_string ();
+                  string _nickname = "";
+                  if (nickname != null)
+                    {
+                      _nickname = (!) nickname;
+                    }
+                  _persona.nickname = _nickname;
+                }
+            }
         }
-
       /* Allow the caller to inject failures into add_persona_from_details()
        * by providing a mock function which can throw errors as appropriate. */
       if (this.add_persona_from_details_mock != null)

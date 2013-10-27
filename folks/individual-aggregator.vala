@@ -889,9 +889,12 @@ public class Folks.IndividualAggregator : Object
           /* Handle the stores that have already been signaled. Since
            * this might change while we are looping, get a copy first.
            */
+
           var stores = backend.persona_stores.values.to_array ();
+          GLib.debug("new backend--------------------------------------%s:%d\n", backend.name, stores.length);
           foreach (var persona_store in stores)
               {
+                GLib.debug("new backend--------------------------------------\n");
                 this._backend_persona_store_added_cb (backend, persona_store);
               }
         }
