@@ -35,6 +35,7 @@ DIST_SUBDIRS = \
 	ofono \
 	telepathy \
 	tracker \
+	dummy \
 	$(NULL)
 
 EXTRA_DIST = backend.mk
