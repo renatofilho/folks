@@ -22,6 +22,10 @@ folks_dummy_LTLIBRARIES = libfolks-dummy.la
 # Support library
 ##################################################################
 
+pkgconfig_in = folks-dummy.pc.in
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = $(pkgconfig_in:.in=)
+
 libfolks_dummy_la_vala.stamp:
 
 folks_dummy_valasources = \

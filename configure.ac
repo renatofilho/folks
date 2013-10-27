@@ -665,6 +665,7 @@ AC_CONFIG_FILES([
     backends/tracker/lib/folks-tracker-uninstalled.pc
     backends/eds/lib/folks-eds.pc
     backends/eds/lib/folks-eds-uninstalled.pc
+    backends/dummy/lib/folks-dummy.pc
     folks/folks.pc
     folks/folks-uninstalled.pc
     folks/org.freedesktop.folks.gschema.xml
