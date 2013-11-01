@@ -114,7 +114,7 @@ public class AddPersonaTests : DummyTest.TestCase
 
   private async void _test_add_persona_async ()
     {
-      this._aggregator = new IndividualAggregator ();
+      this._aggregator = IndividualAggregator.dup ();
       this._aggregator.individuals_changed_detailed.connect (this._individuals_changed_cb);
       try
         {
