@@ -32,7 +32,6 @@ public class AddPersonaTests : DummyTest.TestCase
   private string _persona_fullname;
   private string _persona_nickname;
   private string _email_1;
-  private bool _added_persona = false;
   private HashTable<string, bool> _properties_found;
   private string _avatar_path;
   private string _im_addr_1;
@@ -341,10 +340,7 @@ public class AddPersonaTests : DummyTest.TestCase
 
   private void _try_to_add ()
     {
-      lock (this._added_persona)
-        {
-          this._add_persona.begin ();
-        }
+      this._add_persona.begin ();
     }
 
   private async void _check_properties (Individual i)
