@@ -294,18 +294,7 @@ public class AddPersonaTests : DummyTest.TestCase
           /* handle replacement */
           if (this._individual_received != null)
             {
-              i.notify["full-name"].disconnect (this._notify_cb);
-              i.notify["nickname"].disconnect (this._notify_cb);
-              i.notify["email-addresses"].disconnect (this._notify_cb);
-              i.notify["avatar"].disconnect (this._notify_cb);
-              i.notify["im-addresses"].disconnect (this._notify_cb);
-              i.notify["phone-numbers"].disconnect (this._notify_cb);
-              i.notify["postal-addresses"].disconnect (this._notify_cb);
-              i.notify["structured-name"].disconnect (this._notify_cb);
-              i.notify["notes"].disconnect (this._notify_cb);
-              i.notify["birthday"].disconnect (this._notify_cb);
-              i.notify["roles"].disconnect (this._notify_cb);
-              i.notify["is-favourite"].disconnect (this._notify_cb);
+              i.notify.disconnect (this._notify_cb);
 
               this._properties_found.remove_all ();
             }
@@ -313,18 +302,7 @@ public class AddPersonaTests : DummyTest.TestCase
           this._individual_received = i;
           retval++;
 
-          i.notify["full-name"].connect (this._notify_cb);
-          i.notify["nickname"].connect (this._notify_cb);
-          i.notify["email-addresses"].connect (this._notify_cb);
-          i.notify["avatar"].connect (this._notify_cb);
-          i.notify["im-addresses"].connect (this._notify_cb);
-          i.notify["phone-numbers"].connect (this._notify_cb);
-          i.notify["postal-addresses"].connect (this._notify_cb);
-          i.notify["structured-name"].connect (this._notify_cb);
-          i.notify["notes"].connect (this._notify_cb);
-          i.notify["birthday"].connect (this._notify_cb);
-          i.notify["roles"].connect (this._notify_cb);
-          i.notify["is-favourite"].connect (this._notify_cb);
+          i.notify.connect (this._notify_cb);
 
           this._check_properties.begin (i);
         }
