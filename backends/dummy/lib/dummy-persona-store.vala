@@ -184,7 +184,18 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
 
   private HashMap<string, Persona> _personas;
   private Map<string, Persona> _personas_ro;
-  private HashSet<Persona>? _pending_personas = null;
+
+  /* Personas which have been registered but not yet emitted in a
+   * personas-changed signal. */
+  private HashSet<Persona> _pending_persona_registrations;
+
+  /* Personas which have been unregistered but not yet emitted in a
+   * personas-changed signal. */
+  private HashSet<Persona> _pending_persona_unregistrations;
+
+  /* Freeze counter for persona changes: personas-changed is only emitted when
+   * this is 0. */
+  private uint _persona_changes_frozen = 0;
 
   /**
    * The {@link Persona}s exposed by this PersonaStore.
@@ -226,6 +237,8 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
     {
       this._personas = new HashMap<string, Persona> ();
       this._personas_ro = this._personas.read_only_view;
+      this._pending_persona_registrations = new HashSet<Persona> ();
+      this._pending_persona_unregistrations = new HashSet<Persona> ();
     }
 
   /**
@@ -632,12 +645,10 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
         {
           this._personas.unset (persona.iid);
 
-          /* Handle the case where a contact is removed before the persona
-           * store has reached quiescence. */
-          if (this._pending_personas != null)
-            {
-              this._pending_personas.remove ((!) _persona);
-            }
+          /* Handle the case where a contact is removed while persona changes
+           * are frozen. */
+          this._pending_persona_registrations.remove ((!) _persona);
+          this._pending_persona_unregistrations.remove ((!) _persona);
 
           /* Notify of the removal. */
           var removed_personas = new HashSet<Folks.Persona> ();
@@ -812,81 +823,147 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
     }
 
   /**
-   * TODO
+   * Freeze persona changes in the store.
    *
-   * @param personas TODO
+   * This freezes externally-visible changes to the set of personas in the store
+   * until {@link PersonaStore.thaw_persona_changes} is called, at which point
+   * all pending changes are made visible in the {@link PersonaStore.personas}
+   * property and by emitting {@link PersonaStore.personas_changed}.
+   *
+   * Calls to {@link PersonaStore.freeze_persona_changes} and
+   * {@link PersonaStore.thaw_persona_changes} must be well-nested. Pending
+   * changes will only be committed after the final call to
+   * {@link PersonaStore.thaw_persona_changes}.
+   *
+   * @see PersonaStore.thaw_persona_changes
+   * @since UNRELEASED
+   */
+  public void freeze_persona_changes ()
+    {
+      this._persona_changes_frozen++;
+    }
+
+  /**
+   * Thaw persona changes in the store.
+   *
+   * This thaws externally-visible changes to the set of personas in the store.
+   * If the number of calls to {@link PersonaStore.thaw_persona_changes} matches
+   * the number of calls to {@link PersonaStore.freeze_persona_changes}, all
+   * pending changes are committed and made externally-visible.
+   *
+   * @see PersonaStore.freeze_persona_changes
+   * @since UNRELEASED
+   */
+  public void thaw_persona_changes ()
+    {
+      assert (this._persona_changes_frozen > 0);
+      this._persona_changes_frozen--;
+
+      if (this._persona_changes_frozen == 0)
+        {
+          /* Emit the queued changes. */
+          this._emit_personas_changed (this._pending_persona_registrations,
+              this._pending_persona_unregistrations);
+
+          this._pending_persona_registrations.clear ();
+          this._pending_persona_unregistrations.clear ();
+        }
+    }
+
+  /**
+   * Register new personas with the persona store.
+   *
+   * This registers a set of personas as if they had just appeared in the
+   * backing store. If the persona store is not frozen (see
+   * {@link PersonaStore.freeze_persona_changes}) the changes are made
+   * externally visible on the store immediately (e.g. in the
+   * {@link PersonaStore.personas} property and through a
+   * {@link PersonaStore.personas_changed} signal). If the store is frozen, the
+   * changes will be pending until the store is next unfrozen.
+   *
+   * All elements in the @personas set be of type
+   * {@link PersonaStore.persona_type}.
+   *
+   * @param personas set of personas to register
    * @since UNRELEASED
    */
   public void register_personas (Set<Persona> personas)
     {
-      HashSet<Persona> added_personas;
+      Set<Persona> added_personas;
+      var emit_notifications = (this._persona_changes_frozen == 0);
 
-      /* If the persona store hasn't yet reached quiescence, queue up the
-       * personas and emit a notification about them later.. */
-      if (this._is_quiescent == false)
-        {
-          /* Lazily create pending_personas. */
-          if (this._pending_personas == null)
-            {
-              this._pending_personas = new HashSet<Persona> ();
-            }
-
-          added_personas = this._pending_personas;
-        }
+      /* If the persona store has persona changes frozen, queue up the
+       * personas and emit a notification about them later. */
+      if (emit_notifications == false)
+          added_personas = this._pending_persona_registrations;
       else
-        {
           added_personas = new HashSet<Persona> ();
-        }
 
       foreach (var persona in personas)
         {
           assert (persona.get_type ().is_a (this._persona_type));
 
-          if (!this._personas.has_key (persona.iid))
-            {
+          /* Handle the case where a persona is unregistered while the store is
+           * frozen, then registered again before it's unfrozen. */
+          if (this._pending_persona_unregistrations.remove (persona))
+              this._personas.unset (persona.iid);
+
+          if (this._personas.has_key (persona.iid))
+              continue;
+
+          added_personas.add (persona);
+          if (emit_notifications == true)
               this._personas.set (persona.iid, persona);
-              added_personas.add (persona);
-            }
         }
 
-      if (added_personas.size > 0 && this._is_quiescent == true)
-        {
+      if (added_personas.size > 0 && emit_notifications == true)
           this._emit_personas_changed (added_personas, null);
-        }
     }
 
   /**
-   * TODO
+   * Unregister existing personas with the persona store.
    *
-   * @param personas TODO
+   * This unregisters a set of personas as if they had just disappeared from the
+   * backing store. If the persona store is not frozen (see
+   * {@link PersonaStore.freeze_persona_changes}) the changes are made
+   * externally visible on the store immediately (e.g. in the
+   * {@link PersonaStore.personas} property and through a
+   * {@link PersonaStore.personas_changed} signal). If the store is frozen, the
+   * changes will be pending until the store is next unfrozen.
+   *
+   * @param personas set of personas to unregister
    * @since UNRELEASED
    */
   public void unregister_personas (Set<Persona> personas)
     {
-      var removed_personas = new HashSet<Persona> ();
+      Set<Persona> removed_personas;
+      var emit_notifications = (this._persona_changes_frozen == 0);
+
+      /* If the persona store has persona changes frozen, queue up the
+       * personas and emit a notification about them later. */
+      if (emit_notifications == false)
+          removed_personas = this._pending_persona_unregistrations;
+      else
+          removed_personas = new HashSet<Persona> ();
 
       foreach (var _persona in personas)
         {
+          /* Handle the case where a persona is registered while the store is
+           * frozen, then unregistered before it's unfrozen. */
+          this._pending_persona_registrations.remove (_persona);
+
           Persona? persona = this._personas.get (_persona.iid);
           if (persona == null)
               continue;
 
           removed_personas.add ((!) persona);
-          this._personas.unset (((!) persona).iid);
-
-          /* Handle the case where a contact is removed before the persona
-           * store has reached quiescence. */
-          if (this._pending_personas != null)
-              this._pending_personas.remove ((!) persona);
+          if (emit_notifications == true)
+              this._personas.unset (((!) persona).iid);
         }
 
-       if (removed_personas.size > 0)
-         {
+       if (removed_personas.size > 0 && emit_notifications == true)
            this._emit_personas_changed (null, removed_personas);
-         }
     }
-
-/* TODO: Some method of emitting _emit_personas_changed with no null values */
 
   /**
    * TODO
@@ -906,19 +983,6 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
        * quiescence (even if there was an error). */
       if (this._is_quiescent == false)
         {
-          /* Emit a notification about all the personas which were found in the
-           * initial query. They're queued up in _contacts_added_cb() and only
-           * emitted here as _contacts_added_cb() may be called many times
-           * before _contacts_complete_cb() is called. For example, dummy seems to
-           * like emitting contacts in batches of 16 at the moment.
-           * Queueing the personas up and emitting a single notification is a
-           * lot more efficient for the individual aggregator to handle. */
-          if (this._pending_personas != null)
-            {
-              this._emit_personas_changed (this._pending_personas, null);
-              this._pending_personas = null;
-            }
-
           this._is_quiescent = true;
           this.notify_property ("is-quiescent");
         }
