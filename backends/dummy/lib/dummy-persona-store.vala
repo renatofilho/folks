@@ -184,7 +184,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
 
   private HashMap<string, Persona> _personas;
   private Map<string, Persona> _personas_ro;
-  private HashSet<Persona> _pending_personas = null;
+  private HashSet<Persona>? _pending_personas = null;
 
   /**
    * The {@link Persona}s exposed by this PersonaStore.
