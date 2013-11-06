@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2013 Philip Withnall
- *               2013 Canonical Ltd
+ * Copyright (C) 2013 Canonical Ltd
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +17,7 @@
  *
  * Authors:
  *       Philip Withnall <philip@tecnocode.co.uk>
-  *      Renato Araujo Oliveira Filho <renato@canonical.com>
+ *       Renato Araujo Oliveira Filho <renato@canonical.com>
  */
 
 using Folks;
