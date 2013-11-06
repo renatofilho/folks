@@ -56,7 +56,7 @@ public class AddPersonaTests : DummyTest.TestCase
     {
       base ("AddPersonaTests");
 
-      this.add_test ("test adding a persona to dummy ", this.test_add_persona);
+      this.add_test ("adding a persona", this.test_add_persona);
     }
 
   public void test_add_persona ()
@@ -96,8 +96,7 @@ public class AddPersonaTests : DummyTest.TestCase
       this._properties_found.insert ("postal-address-1", false);
       this._properties_found.insert ("structured_name", false);
       this._properties_found.insert ("note", false);
-      /* FIXME: for some reason Birthday is not getting notified
-      this._properties_found.insert ("birthday", false); */
+      this._properties_found.insert ("birthday", false);
       this._properties_found.insert ("role-1", false);
       this._properties_found.insert ("is-favourite", false);
 
