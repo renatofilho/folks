@@ -114,7 +114,7 @@ public class IndividualRetrievalTests : DummyTest.TestCase
       expected_individuals.add ("Rodrigo A");
 
       /* Set up the aggregator */
-      var aggregator = new IndividualAggregator ();
+      var aggregator = IndividualAggregator.dup ();
       aggregator.individuals_changed_detailed.connect ((changes) =>
         {
           var added = changes.get_values ();
