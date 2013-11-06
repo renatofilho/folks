@@ -297,7 +297,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
   public override async Folks.Persona? add_persona_from_details (
       HashTable<string, Value?> details) throws PersonaStoreError
     {
-      // We have to have called prepare() beforehand.
+      /* We have to have called prepare() beforehand. */
       if (!this._is_prepared)
         {
           throw new PersonaStoreError.STORE_OFFLINE (
@@ -613,7 +613,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
       throws PersonaStoreError
       requires (persona is Dummyf.Persona)
     {
-      // We have to have called prepare() beforehand.
+      /* We have to have called prepare() beforehand. */
       if (!this._is_prepared)
         {
           throw new PersonaStoreError.STORE_OFFLINE (
@@ -751,7 +751,8 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
    * subtype of {@link Dummyf.Persona}.
    *
    * This may be modified at any time, with modifications taking effect for the
-   * next call to {@link PersonaStore.add_persona_from_details}.
+   * next call to {@link PersonaStore.add_persona_from_details} or
+   * {@link PersonaStore.register_personas}.
    *
    * @since UNRELEASED
    */
