@@ -26,23 +26,13 @@ pkgconfig_in = folks-dummy.pc.in
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(pkgconfig_in:.in=)
 
-libfolks_dummy_la_vala.stamp:
-
-folks_dummy_valasources = \
+libfolks_dummy_la_SOURCES = \
 	dummy-backend.vala \
 	dummy-fat-persona.vala \
 	dummy-persona.vala \
 	dummy-persona-store.vala \
 	$(NULL)
 
-libfolks_dummy_la_SOURCES = \
-	$(folks_dummy_valasources) \
-	$(NULL)
-
-# XXX: it would be nice to do something like this below:
-#    $(addprefix --pkg ,$(folks_backend_dummy_deps)) \
-# to factor out repetition, but automake's Vala support doesn't like it
-# because it assumes it can simply match every flag in any _VALAFLAGS string.
 libfolks_dummy_la_VALAFLAGS = \
 	$(AM_VALAFLAGS) \
 	$(ERROR_VALAFLAGS) \
@@ -54,12 +44,20 @@ libfolks_dummy_la_VALAFLAGS = \
 	--pkg gio-2.0 \
 	--pkg gobject-2.0 \
 	--includedir folks \
+	--gir FolksDummy-$(API_VERSION_DOT).gir \
+	--library folks-dummy \
 	--vapi folks-dummy.vapi \
 	-H folks/folks-dummy.h \
 	$(NULL)
 
+libfolks_dummy_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	-include $(top_srcdir)/folks/warnings.h \
+	$(NULL)
+
 libfolks_dummy_la_CFLAGS = \
 	$(AM_CFLAGS) \
+	$(ERROR_CFLAGS) \
 	$(CODE_COVERAGE_CFLAGS) \
 	$(GIO_CFLAGS) \
 	$(GLIB_CFLAGS) \
@@ -100,17 +98,51 @@ dist_vapi_DATA = \
 # General
 ##################################################################
 
-MAINTAINERCLEANFILES = \
-	$(folks_dummy_valasources:.vala=.c) \
-	libfolks_dummy_la_vala.stamp \
-	folks/folks-dummy.h \
-	folks-dummy.vapi \
-	$(NULL)
-
+CLEANFILES =
+MAINTAINERCLEANFILES =
 EXTRA_DIST = \
 	$(pkgconfig_in) \
 	$(MAINTAINERCLEANFILES) \
 	$(NULL)
 
--include ../backend.mk
+##################################################################
+# Introspection
+##################################################################
+
+-include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_SCANNER_ARGS = \
+	$(ERROR_INTROSPECTION_SCANNER_ARGS) \
+	--add-include-path=$(srcdir) \
+	--add-include-path=$(abs_top_builddir)/folks \
+	--warn-all \
+	$(NULL)
+
+# Set PKG_CONFIG_PATH so we can find the backend's uninstalled pkg-config file.
+INTROSPECTION_SCANNER_ENV = \
+	PKG_CONFIG_PATH=$(top_builddir)/folks:$${PKG_CONFIG_PATH}
+
+INTROSPECTION_COMPILER_ARGS = \
+	--includedir=$(srcdir) \
+	--includedir=$(abs_top_builddir)/folks \
+	$(NULL)
+
+if HAVE_INTROSPECTION
+FolksDummy-$(API_VERSION_DOT).gir: libfolks-dummy.la
+GIRS = FolksDummy-$(API_VERSION_DOT).gir
+
+girdir = $(datadir)/gir-1.0
+dist_gir_DATA = $(GIRS)
+
+MAINTAINERCLEANFILES += $(dist_gir_DATA)
+
+typelibdir = $(libdir)/girepository-1.0
+nodist_typelib_DATA = $(GIRS:.gir=.typelib)
+
+CLEANFILES += $(nodist_typelib_DATA)
+endif
+
+##################################################################
+# Common
+##################################################################
+
 -include $(top_srcdir)/git.mk
