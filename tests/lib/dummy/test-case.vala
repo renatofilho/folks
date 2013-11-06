@@ -31,12 +31,12 @@ public class DummyTest.TestCase : Folks.TestCase
   /**
    * The dummy test backend.
    */
-  public Dummyf.Backend dummy_backend;
+  public FolksDummy.Backend dummy_backend;
 
   /**
    * The default persona store
    */
-  public Dummyf.PersonaStore dummy_persona_store;
+  public FolksDummy.PersonaStore dummy_persona_store;
 
   private BackendStore backend_store;
 
@@ -69,7 +69,7 @@ public class DummyTest.TestCase : Folks.TestCase
         });
       TestUtils.loop_run_with_timeout (main_loop);
 
-      this.dummy_backend = this.backend_store.dup_backend_by_name ("dummy") as Dummyf.Backend;
+      this.dummy_backend = this.backend_store.dup_backend_by_name ("dummy") as FolksDummy.Backend;
       this.configure_primary_store ();
     }
 
@@ -81,8 +81,8 @@ public class DummyTest.TestCase : Folks.TestCase
           Folks.PersonaStore.detail_key (PersonaDetail.PHONE_NUMBERS),
           null };
 
-      this.dummy_persona_store = new Dummyf.PersonaStore ("dummy-store", "Dummy personas", writable_properties);
-      this.dummy_persona_store.persona_type = typeof (Dummyf.FatPersona);
+      this.dummy_persona_store = new FolksDummy.PersonaStore ("dummy-store", "Dummy personas", writable_properties);
+      this.dummy_persona_store.persona_type = typeof (FolksDummy.FatPersona);
 
       persona_stores.add (this.dummy_persona_store);
       this.dummy_backend.register_persona_stores (persona_stores);

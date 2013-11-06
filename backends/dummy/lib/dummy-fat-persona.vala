@@ -26,16 +26,16 @@ using Gee;
 using GLib;
 
 /**
- * A persona subclass which represents a single EDS contact. TODO
+ * A persona subclass which represents a single dummy contact. TODO
  *
- * Each {@link Dummy.Persona} instance represents a single EDS {@link E.Contact}.
+ * Each {@link Dummy.Persona} instance represents a single dummy {@link E.Contact}.
  * When the contact is modified (either by this folks client, or a different
  * client), the {@link Dummy.Persona} remains the same, but is assigned a new
  * {@link E.Contact}. It then updates its properties from this new contact.
  *
  * @since UNRELEASED
  */
-public class Dummyf.FatPersona : Dummyf.Persona,
+public class FolksDummy.FatPersona : FolksDummy.Persona,
     AntiLinkable,
     AvatarDetails,
     BirthdayDetails,
@@ -57,7 +57,7 @@ public class Dummyf.FatPersona : Dummyf.Persona,
    * Create a new persona.
    *
    * Create a new persona for the {@link PersonaStore} ``store``, representing
-   * the EDS contact given by ``contact``. TODO
+   * the dummy contact given by ``contact``. TODO
    *
    * @param store the store which will contain the persona
    * @param contact_id TODO

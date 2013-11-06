@@ -20,7 +20,7 @@
 using Gee;
 using Folks;
 using DummyTest;
-using Dummyf;
+using FolksDummy;
 
 public class IndividualRetrievalTests : DummyTest.TestCase
 {

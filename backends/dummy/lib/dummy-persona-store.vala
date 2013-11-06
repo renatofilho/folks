@@ -25,7 +25,7 @@ using Gee;
 using GLib;
 
 /**
- * A persona store which allows {@link Dummyf.Persona}s to be programmatically
+ * A persona store which allows {@link FolksDummy.Persona}s to be programmatically
  * created and manipulated, for the purposes of testing the core of libfolks
  * itself.
  *
@@ -38,7 +38,7 @@ using GLib;
  *
  * @since UNRELEASED
  */
-public class Dummyf.PersonaStore : Folks.PersonaStore
+public class FolksDummy.PersonaStore : Folks.PersonaStore
 {
   private bool _is_prepared = false;
   private bool _prepare_pending = false;
@@ -202,8 +202,8 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
    * Create a new persona store.
    *
    * This store will have no personas to begin with; use
-   * {@link Dummyf.PersonaStore.register_personas} to add some, then call
-   * {@link Dummyf.PersonaStore.reach_quiescence} to signal the store reaching
+   * {@link FolksDummy.PersonaStore.register_personas} to add some, then call
+   * {@link FolksDummy.PersonaStore.reach_quiescence} to signal the store reaching
    * quiescence.
    *
    * @param id The new store's ID.
@@ -231,7 +231,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
   /**
    * Type of a mock function for {@link PersonaStore.add_persona_from_details}.
    *
-   * See {@link Dummyf.PersonaStore.add_persona_from_details_mock}.
+   * See {@link FolksDummy.PersonaStore.add_persona_from_details_mock}.
    *
    * @param persona the persona being added to the store, as constructed from
    * the details passed to {@link PersonaStore.add_persona_from_details}.
@@ -290,7 +290,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
    * @throws Folks.PersonaStoreError.STORE_OFFLINE if the store hasn’t been
    * prepared
    * @throws Folks.PersonaStoreError.CREATE_FAILED if creating the persona in
-   * the EDS store failed
+   * the dummy store failed
    *
    * @since UNRELEASED
    */
@@ -316,7 +316,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
           "iid", iid,
           "store", this,
           "is-user", false,
-          null) as Dummyf.Persona;
+          null) as FolksDummy.Persona;
       assert (persona != null);
       persona.update_writeable_properties (this.always_writeable_properties);
 
@@ -560,7 +560,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
   /**
    * Type of a mock function for {@link PersonaStore.remove_persona}.
    *
-   * See {@link Dummyf.PersonaStore.remove_persona_mock}.
+   * See {@link FolksDummy.PersonaStore.remove_persona_mock}.
    *
    * @param persona the persona being removed from the store
    * @throws PersonaStoreError to be thrown from
@@ -611,7 +611,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
    */
   public override async void remove_persona (Folks.Persona persona)
       throws PersonaStoreError
-      requires (persona is Dummyf.Persona)
+      requires (persona is FolksDummy.Persona)
     {
       /* We have to have called prepare() beforehand. */
       if (!this._is_prepared)
@@ -624,7 +624,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
        * by providing a mock function which can throw errors as appropriate. */
       if (this.remove_persona_mock != null)
         {
-          this.remove_persona_mock ((Dummyf.Persona) persona);
+          this.remove_persona_mock ((FolksDummy.Persona) persona);
         }
 
       Persona? _persona = this._personas.get (persona.iid);
@@ -649,7 +649,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
   /**
    * Type of a mock function for {@link PersonaStore.prepare}.
    *
-   * See {@link Dummyf.PersonaStore.prepare_mock}.
+   * See {@link FolksDummy.PersonaStore.prepare_mock}.
    *
    * @throws PersonaStoreError to be thrown from {@link PersonaStore.prepare}
    * @since UNRELEASED
@@ -741,14 +741,14 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
    */
 
 
-  private Type _persona_type = typeof (Dummyf.Persona);
+  private Type _persona_type = typeof (FolksDummy.Persona);
 
   /**
    * Type of programmatically created personas.
    *
    * This is the type used to create new personas when
    * {@link PersonaStore.add_persona_from_details} is called. It must be a
-   * subtype of {@link Dummyf.Persona}.
+   * subtype of {@link FolksDummy.Persona}.
    *
    * This may be modified at any time, with modifications taking effect for the
    * next call to {@link PersonaStore.add_persona_from_details} or
@@ -761,7 +761,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
       get { return this._persona_type; }
       set
         {
-          assert (value.is_a (typeof (Dummyf.Persona)));
+          assert (value.is_a (typeof (FolksDummy.Persona)));
           if (this._persona_type != value)
             {
               this._persona_type = value;
@@ -909,7 +909,7 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
           /* Emit a notification about all the personas which were found in the
            * initial query. They're queued up in _contacts_added_cb() and only
            * emitted here as _contacts_added_cb() may be called many times
-           * before _contacts_complete_cb() is called. For example, EDS seems to
+           * before _contacts_complete_cb() is called. For example, dummy seems to
            * like emitting contacts in batches of 16 at the moment.
            * Queueing the personas up and emitting a single notification is a
            * lot more efficient for the individual aggregator to handle. */

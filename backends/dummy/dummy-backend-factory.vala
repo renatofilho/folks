@@ -34,7 +34,7 @@ using Folks;
  */
 public void module_init (BackendStore backend_store)
 {
-  backend_store.add_backend (new Dummyf.Backend ());
+  backend_store.add_backend (new FolksDummy.Backend ());
 }
 
 /**
