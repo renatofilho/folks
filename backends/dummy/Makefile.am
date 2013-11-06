@@ -69,5 +69,4 @@ GITIGNOREFILES = \
 	dummy_la_vala.stamp \
 	$(NULL)
 
--include backend.mk
 -include $(top_srcdir)/git.mk
