@@ -426,16 +426,12 @@ public class AddPersonaTests : DummyTest.TestCase
 
   private void _exit_if_all_properties_found ()
     {
-      GLib.debug("_exit_if_all_properties_found>>>>>>>>>>>>>>>>>>>>>>>>>>>: BEGIN\n");
       foreach (var k in this._properties_found.get_keys ())
         {
           var v = this._properties_found.lookup (k);
-          if (v == false) {
-            GLib.debug("_exit_if_all_properties_found>>>>>>>>>>>>>>>>>>>>>>>>>>>: [%s:%d] CONTINUE\n", k, (int) v);
-            return;
-          }
+          if (v == false)
+              return;
         }
-      GLib.debug("_exit_if_all_properties_found>>>>>>>>>>>>>>>>>>>>>>>>>>>: END\n");
       this._main_loop.quit ();
     }
 }
