@@ -868,18 +868,16 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
       foreach (var _persona in personas)
         {
           Persona? persona = this._personas.get (_persona.iid);
-          if (persona != null)
-            {
-              removed_personas.add ((!) persona);
-              this._personas.unset (((!) persona).iid);
+          if (persona == null)
+              continue;
 
-              /* Handle the case where a contact is removed before the persona
-               * store has reached quiescence. */
-              if (this._pending_personas != null)
-                {
-                  this._pending_personas.remove ((!) persona);
-                }
-            }
+          removed_personas.add ((!) persona);
+          this._personas.unset (((!) persona).iid);
+
+          /* Handle the case where a contact is removed before the persona
+           * store has reached quiescence. */
+          if (this._pending_personas != null)
+              this._pending_personas.remove ((!) persona);
         }
 
        if (removed_personas.size > 0)
