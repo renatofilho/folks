@@ -34,12 +34,12 @@ public class IndividualRetrievalTests : DummyTest.TestCase
 
   private struct PersonaInfo
     {
-      string contact_id;
-      string full_name;
-      string nickname;
-      string home_email_address;
-      string jabber_im_address;
-      string yahoo_im_address;
+      unowned string contact_id;
+      unowned string full_name;
+      unowned string nickname;
+      unowned string home_email_address;
+      unowned string jabber_im_address;
+      unowned string yahoo_im_address;
     }
 
   private const PersonaInfo[] _persona_info =
