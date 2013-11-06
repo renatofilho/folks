@@ -26,12 +26,24 @@ using Gee;
 using GLib;
 
 /**
- * A persona subclass which represents a single dummy contact. TODO
+ * A persona subclass representing a single ‘fat’ contact.
  *
- * Each {@link Dummy.Persona} instance represents a single dummy {@link E.Contact}.
- * When the contact is modified (either by this folks client, or a different
- * client), the {@link Dummy.Persona} remains the same, but is assigned a new
- * {@link E.Contact}. It then updates its properties from this new contact.
+ * This mocks up a ‘fat’ persona which implements all the available property
+ * interfaces provided by libfolks. This is in contrast with
+ * {@link FolksDummy.Persona}, which provides a base class implementing none of
+ * libfolks’ interfaces.
+ *
+ * The fat dummy persona can be used to simulate a persona from most libfolks
+ * backends, if writing a custom {@link FolksDummy.Persona} subclass is not an
+ * option.
+ *
+ * There are two sides to this class’ interface: the normal methods required by
+ * the libfolks ‘details’ interfaces, such as {@link FatPersona.change_gender},
+ * and the backend methods which should be called by test driver code to
+ * simulate changes in the backing store providing this persona, such as
+ * {@link FatPersona.update_gender}. For example, test driver code should call
+ * {@link FatPersona.update_nickname} to simulate the user editing a contact’s
+ * nickname in an online address book which is being exposed to libfolks.
  *
  * @since UNRELEASED
  */
@@ -54,14 +66,17 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
     WebServiceDetails
 {
   /**
-   * Create a new persona.
+   * Create a new ‘fat’ persona.
    *
-   * Create a new persona for the {@link PersonaStore} ``store``, representing
-   * the dummy contact given by ``contact``. TODO
+   * Create a new persona for the {@link PersonaStore} ``store``, with the given
+   * construct-only properties.
    *
    * @param store the store which will contain the persona
-   * @param contact_id TODO
-   * @param is_user TODO
+   * @param contact_id a unique free-form string identifier for the persona
+   * @param is_user ``true`` if the persona represents the user, ``false``
+   * otherwise
+   * @param linkable_properties an array of names of the properties which should
+   * be used for linking this persona to others
    *
    * @since UNRELEASED
    */
@@ -559,6 +574,7 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
     }
 
   private DateTime? _birthday = null;
+
   /**
    * {@inheritDoc}
    *
