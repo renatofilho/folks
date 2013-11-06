@@ -32,160 +32,76 @@ public class IndividualRetrievalTests : DummyTest.TestCase
       this.add_test ("dummy individuals", this.test_aggregator);
     }
 
-  private Folks.Persona _create_persona_rodrigo ()
+  private struct PersonaInfo
     {
-      var rodrigo = new FatPersona (this.dummy_persona_store, "dummy@2");
-      var main_loop = new GLib.MainLoop (null, false);
-
-      rodrigo.change_full_name.begin ("Rodrigo Almeida", (s, r) =>
-        {
-          try
-            {
-              rodrigo.change_full_name.end (r);
-            }
-          catch (Folks.PropertyError e)
-            {
-            }
-          main_loop.quit ();
-        });
-      TestUtils.loop_run_with_timeout (main_loop);
-
-      rodrigo.nickname = "kiko";
-      rodrigo.change_nickname.begin ("kiko", (s, r) =>
-        {
-          try
-            {
-              rodrigo.change_nickname.end (r);
-            }
-          catch (Folks.PropertyError e)
-            {
-            }
-          main_loop.quit ();
-        });
-      TestUtils.loop_run_with_timeout (main_loop);
-
-      /* E-mail addresses. */
-      var emails = new HashSet<EmailFieldDetails> (
-          AbstractFieldDetails<string>.hash_static,
-          AbstractFieldDetails<string>.equal_static);
-
-      var email_1 = new EmailFieldDetails ("rodrigo@gmail.com");
-      email_1.set_parameter (AbstractFieldDetails.PARAM_TYPE,
-          AbstractFieldDetails.PARAM_TYPE_HOME);
-      emails.add (email_1);
-      rodrigo.change_email_addresses.begin (emails, (s, r) =>
-        {
-          try
-            {
-              rodrigo.change_email_addresses.end (r);
-            }
-          catch (Folks.PropertyError e)
-            {
-            }
-          main_loop.quit ();
-        });
-      TestUtils.loop_run_with_timeout (main_loop);
-
-      /* IM addresses. */
-      var im_fds = new HashMultiMap<string, ImFieldDetails> ();
-      im_fds.set ("jabber", new ImFieldDetails ("rodrigo@jabber.com"));
-      im_fds.set ("yahoo", new ImFieldDetails ("rodrigo@yahoo.com"));
-      rodrigo.change_im_addresses.begin (im_fds, (s, r) =>
-        {
-          try
-            {
-              rodrigo.change_im_addresses.end (r);
-            }
-          catch (Folks.PropertyError e)
-            {
-            }
-          main_loop.quit ();
-        });
-      TestUtils.loop_run_with_timeout (main_loop);
-      return rodrigo;
+      string contact_id;
+      string full_name;
+      string nickname;
+      string home_email_address;
+      string jabber_im_address;
+      string yahoo_im_address;
     }
 
-  private Folks.Persona _create_persona_renato ()
+  private const PersonaInfo[] _persona_info =
     {
-      var renato = new FatPersona (this.dummy_persona_store, "dummy@1");
-      var main_loop = new GLib.MainLoop (null, false);
+      { "dummy@2", "Rodrigo A", "kiko", "rodrigo@gmail.com",
+          "rodrigo@jabber.com", "rodrigo@yahoo.com" },
+      { "dummy@1", "Renato F", "renatof", "renato@gmail.com",
+          "renato@jabber.com", "renato@yahoo.com" },
+    };
 
-      renato.change_full_name.begin ("Renato Araujo Oliveira Filho", (s, r) =>
+  private static async Folks.Persona _create_persona_from_info (
+      FolksDummy.PersonaStore store, PersonaInfo info)
+    {
+      var p = new FatPersona (store, info.contact_id);
+
+      try
         {
-          try
-            {
-              renato.change_full_name.end (r);
-            }
-          catch (Folks.PropertyError e)
-            {
-              assert_not_reached ();
-            }
-          main_loop.quit();
-        });
-      TestUtils.loop_run_with_timeout (main_loop);
+          /* Names. */
+          yield p.change_full_name (info.full_name);
+          yield p.change_nickname (info.nickname);
 
-      renato.change_nickname.begin ("renatofilho", (s, r) =>
+          /* E-mail addresses. */
+          var emails = new HashSet<EmailFieldDetails> (
+              AbstractFieldDetails<string>.hash_static,
+              AbstractFieldDetails<string>.equal_static);
+
+          var email_1 = new EmailFieldDetails (info.home_email_address);
+          email_1.set_parameter (AbstractFieldDetails.PARAM_TYPE,
+              AbstractFieldDetails.PARAM_TYPE_HOME);
+          emails.add (email_1);
+
+          yield p.change_email_addresses (emails);
+
+          /* IM addresses. */
+          var im_fds = new HashMultiMap<string, ImFieldDetails> ();
+          im_fds.set ("jabber", new ImFieldDetails (info.jabber_im_address));
+          im_fds.set ("yahoo", new ImFieldDetails (info.yahoo_im_address));
+
+          yield p.change_im_addresses (im_fds);
+        }
+      catch (Folks.PropertyError e)
         {
-          try
-            {
-              renato.change_nickname.end (r);
-            }
-          catch (Folks.PropertyError e)
-            {
-            }
-          main_loop.quit ();
-        });
-      TestUtils.loop_run_with_timeout (main_loop);
+          error ("Error setting property: %s", e.message);
+        }
 
-      /* E-mail addresses. */
-      var emails = new HashSet<EmailFieldDetails> (
-          AbstractFieldDetails<string>.hash_static,
-          AbstractFieldDetails<string>.equal_static);
-
-      var email_1 = new EmailFieldDetails ("renato@canonical.com");
-      email_1.set_parameter (AbstractFieldDetails.PARAM_TYPE,
-          AbstractFieldDetails.PARAM_TYPE_HOME);
-      emails.add (email_1);
-      renato.change_email_addresses.begin (emails, (s, r) =>
-        {
-          try
-            {
-              renato.change_email_addresses.end (r);
-            }
-          catch (Folks.PropertyError e)
-            {
-            }
-          main_loop.quit ();
-        });
-      TestUtils.loop_run_with_timeout (main_loop);
-
-      /* IM addresses. */
-      var im_fds = new HashMultiMap<string, ImFieldDetails> ();
-      im_fds.set ("jabber", new ImFieldDetails ("renato@jabber.com"));
-      im_fds.set ("yahoo", new ImFieldDetails ("renato@yahoo.com"));
-      renato.change_im_addresses.begin (im_fds, (s, r) =>
-        {
-          try
-            {
-              renato.change_im_addresses.end (r);
-            }
-          catch (Folks.PropertyError e)
-            {
-            }
-          main_loop.quit ();
-        });
-      TestUtils.loop_run_with_timeout (main_loop);
-
-      return renato;
+      return p;
     }
 
-  private void _register_personas ()
+  private async void _register_personas ()
     {
       var personas = new HashSet<Folks.Persona> ();
-      var kiko = this._create_persona_rodrigo ();
-      GLib.debug ("CREATED: %s\n", (kiko as NameDetails).nickname);
-      personas.add (this._create_persona_renato ());
-      personas.add (this._create_persona_rodrigo ());
+
+      /* Create a set of personas. */
+      foreach (var info in IndividualRetrievalTests._persona_info)
+        {
+          var p =
+              yield IndividualRetrievalTests._create_persona_from_info (
+                  this.dummy_persona_store, info);
+          personas.add (p);
+        }
+
+      /* Register them with the dummy store. */
       this.dummy_persona_store.register_personas (personas);
     }
 
@@ -194,8 +110,8 @@ public class IndividualRetrievalTests : DummyTest.TestCase
       var main_loop = new GLib.MainLoop (null, false);
 
       HashSet<string> expected_individuals = new HashSet<string> ();
-      expected_individuals.add ("Renato Araujo Oliveira Filho");
-      expected_individuals.add ("Rodrigo Almeida");
+      expected_individuals.add ("Renato F");
+      expected_individuals.add ("Rodrigo A");
 
       /* Set up the aggregator */
       var aggregator = new IndividualAggregator ();
@@ -223,13 +139,16 @@ public class IndividualRetrievalTests : DummyTest.TestCase
 
       Idle.add (() =>
         {
-          aggregator.prepare.begin ((s,r) =>
+          aggregator.prepare.begin ((s, r) =>
             {
               try
                 {
                   aggregator.prepare.end (r);
                   this.dummy_persona_store.reach_quiescence ();
-                  this._register_personas ();
+                  this._register_personas.begin ((s, r) =>
+                    {
+                      this._register_personas.end (r);
+                    });
                 }
               catch (GLib.Error e1)
                 {
