@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2009 Zeeshan Ali (Khattak) <zeeshanak@gnome.org>.
  * Copyright (C) 2009 Nokia Corporation.
- * Copyright (C) 2011 Collabora Ltd.
+ * Copyright (C) 2011, 2013 Collabora Ltd.
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -29,6 +29,7 @@ using Folks;
 /**
  * The dummy backend module entry point.
  *
+ * @backend_store a store to add the dummy backends to
  * @since UNRELEASED
  */
 public void module_init (BackendStore backend_store)
@@ -39,9 +40,10 @@ public void module_init (BackendStore backend_store)
 /**
  * The dummy backend module exit point.
  *
+ * @param backend_store the store to remove the backends from
  * @since UNRELEASED
  */
 public void module_finalize (BackendStore backend_store)
 {
-  /* TODO: No backend_store.remove_backend() API exists. */
+  /* FIXME: No backend_store.remove_backend() API exists. */
 }
