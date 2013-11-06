@@ -840,6 +840,8 @@ public class Dummyf.PersonaStore : Folks.PersonaStore
 
       foreach (var persona in personas)
         {
+          assert (persona.get_type ().is_a (this._persona_type));
+
           if (!this._personas.has_key (persona.iid))
             {
               this._personas.set (persona.iid, persona);
