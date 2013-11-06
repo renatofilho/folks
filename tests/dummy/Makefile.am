@@ -11,6 +11,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/tests/lib \
 	-I$(top_srcdir)/tests/lib/dummy \
 	-include $(CONFIG_HEADER) \
+	-include $(top_srcdir)/folks/warnings.h \
 	$(NULL)
 
 LDADD = \
@@ -41,12 +42,12 @@ AM_VALAFLAGS += \
 	$(NULL)
 
 # in order from least to most complex
-noinst_PROGRAMS = \
+TESTS = \
 	individual-retrieval \
 	add-persona \
 	$(NULL)
 
-TESTS = $(noinst_PROGRAMS)
+noinst_PROGRAMS = $(TESTS)
 
 individual_retrieval_SOURCES = \
 	individual-retrieval.vala \
@@ -54,21 +55,6 @@ individual_retrieval_SOURCES = \
 
 add_persona_SOURCES = \
 	add-persona.vala \
-	$(NULL)
-
-CLEANFILES = \
-        *.pid \
-        *.address \
-        $(TESTS) \
-        $(NULL)
-
-MAINTAINERCLEANFILES = \
-        $(addsuffix .c,$(noinst_PROGRAMS)) \
-        individual_retrieval_vala.stamp \
-        $(NULL)
-
-EXTRA_DIST = \
-	$(MAINTAINERCLEANFILES) \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
