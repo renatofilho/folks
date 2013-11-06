@@ -581,7 +581,7 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
     {
       yield this.change_property ("birthday", () =>
         {
-          this.update_birthday (birthday);
+          this.update_birthday (bday);
         });
     }
 
