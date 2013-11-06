@@ -17,13 +17,12 @@
  *
  * Authors: Raul Gutierrez Segales <raul.gutierrez.segales@collabora.co.uk>
  *          Renato Araujo Oliveira Filho <renato@canonical.com>
+ *          Philip Withnall <philip.withnall@collabora.co.uk>
  *
  */
 
 using Folks;
 using Gee;
-//using DummyTest;
-//using Dummy;
 
 public class AddPersonaTests : DummyTest.TestCase
 {
@@ -97,8 +96,8 @@ public class AddPersonaTests : DummyTest.TestCase
       this._properties_found.insert ("postal-address-1", false);
       this._properties_found.insert ("structured_name", false);
       this._properties_found.insert ("note", false);
-      //FIXME: for some reason Birthday is not getting notified
-      //this._properties_found.insert ("birthday", false);
+      /* FIXME: for some reason Birthday is not getting notified
+      this._properties_found.insert ("birthday", false); */
       this._properties_found.insert ("role-1", false);
       this._properties_found.insert ("is-favourite", false);
 
@@ -428,16 +427,16 @@ public class AddPersonaTests : DummyTest.TestCase
 
   private void _exit_if_all_properties_found ()
     {
-      GLib.debug("_exit_if_all_properties_found>>>>>>>>>>>>>>>>>>>>>>>>>>>: BEGIN\n");                
+      GLib.debug("_exit_if_all_properties_found>>>>>>>>>>>>>>>>>>>>>>>>>>>: BEGIN\n");
       foreach (var k in this._properties_found.get_keys ())
         {
           var v = this._properties_found.lookup (k);
           if (v == false) {
-            GLib.debug("_exit_if_all_properties_found>>>>>>>>>>>>>>>>>>>>>>>>>>>: [%s:%d] CONTINUE\n", k, (int) v);                
+            GLib.debug("_exit_if_all_properties_found>>>>>>>>>>>>>>>>>>>>>>>>>>>: [%s:%d] CONTINUE\n", k, (int) v);
             return;
           }
         }
-      GLib.debug("_exit_if_all_properties_found>>>>>>>>>>>>>>>>>>>>>>>>>>>: END\n");                
+      GLib.debug("_exit_if_all_properties_found>>>>>>>>>>>>>>>>>>>>>>>>>>>: END\n");
       this._main_loop.quit ();
     }
 }
