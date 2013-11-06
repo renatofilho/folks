@@ -27,10 +27,11 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(pkgconfig_in:.in=)
 
 libfolks_dummy_la_SOURCES = \
+	dummy-namespace.vala \
 	dummy-backend.vala \
-	dummy-fat-persona.vala \
 	dummy-persona.vala \
 	dummy-persona-store.vala \
+	dummy-fat-persona.vala \
 	$(NULL)
 
 libfolks_dummy_la_VALAFLAGS = \
@@ -80,7 +81,7 @@ libfolks_dummy_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(CODE_COVERAGE_LDFLAGS) \
 	-version-info "$(LT_CURRENT)":"$(LT_REVISION)":"$(LT_AGE)" \
-	-export-symbols-regex "^(DUMMY|dummy)_.*|" \
+	-export-symbols-regex "^(DUMMYF|dummyf)_.*|" \
 	$(NULL)
 
 folks_dummy_includedir = $(includedir)/folks
