@@ -133,41 +133,33 @@ public class IndividualRetrievalTests : DummyTest.TestCase
           main_loop.quit ();
         });
 
-      /* Kill the main loop after a few seconds. If there are still individuals
-       * in the set of expected individuals, the aggregator has either failed or
-       * been too slow (which we can consider to be failure). */
-
-      Idle.add (() =>
+      /* Prepare the aggregator, then instruct the store to reach quiescence,
+       * then register the personas with the store. This should result in an
+       * individuals-changed signal. */
+      aggregator.prepare.begin ((s, r) =>
         {
-          aggregator.prepare.begin ((s, r) =>
+          try
             {
-              try
-                {
-                  aggregator.prepare.end (r);
-                  this.dummy_persona_store.reach_quiescence ();
-                  this._register_personas.begin ((s, r) =>
-                    {
-                      this._register_personas.end (r);
-                    });
-                }
-              catch (GLib.Error e1)
-                {
-                  GLib.critical ("failed to prepare aggregator: %s",
-                    e1.message);
-                  assert_not_reached ();
-                }
-            });
+              aggregator.prepare.end (r);
 
-          return false;
+              this.dummy_persona_store.reach_quiescence ();
+
+              this._register_personas.begin ((s, r) =>
+                {
+                  this._register_personas.end (r);
+                });
+            }
+          catch (GLib.Error e1)
+            {
+              error ("Failed to prepare aggregator: %s", e1.message);
+            }
         });
 
+      /* Run the test for a few seconds and fail if the timeout is exceeded. */
       TestUtils.loop_run_with_timeout (main_loop);
 
       /* We should have enumerated exactly the individuals in the set */
       assert (expected_individuals.size == 0);
-
-      /* necessary to reset the aggregator for the next test */
-      aggregator = null;
     }
 }
 
