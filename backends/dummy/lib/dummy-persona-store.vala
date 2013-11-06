@@ -25,9 +25,9 @@ using Gee;
 using GLib;
 
 /**
- * A persona store which allows {@link FolksDummy.Persona}s to be programmatically
- * created and manipulated, for the purposes of testing the core of libfolks
- * itself.
+ * A persona store which allows {@link FolksDummy.Persona}s to be
+ * programmatically created and manipulated, for the purposes of testing the
+ * core of libfolks itself.
  *
  * TODO: Mock functions
  * TODO: Unstable API
@@ -214,8 +214,8 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    *
    * This store will have no personas to begin with; use
    * {@link FolksDummy.PersonaStore.register_personas} to add some, then call
-   * {@link FolksDummy.PersonaStore.reach_quiescence} to signal the store reaching
-   * quiescence.
+   * {@link FolksDummy.PersonaStore.reach_quiescence} to signal the store
+   * reaching quiescence.
    *
    * @param id The new store's ID.
    * @param display_name The new store's display name.
@@ -459,8 +459,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
               var _persona = persona as WebServiceDetails;
               if (_persona != null)
                 {
-                  HashMultiMap<string, WebServiceFieldDetails>
-                    web_service_addresses = 
+                  var web_service_addresses =
                       (HashMultiMap<string, WebServiceFieldDetails>) v.get_object ();
                   if (web_service_addresses != null)
                     {
@@ -966,7 +965,13 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
     }
 
   /**
-   * TODO
+   * Reach quiescence on the store.
+   *
+   * If the {@link PersonaStore.prepare} method has already been called on the
+   * store, this causes the store to signal that it has reached quiescence
+   * immediately. If the store has not yet been prepared, this will set a flag
+   * to ensure that quiescence is reached as soon as
+   * {@link PersonaStore.prepare} is called.
    *
    * @since UNRELEASED
    */
