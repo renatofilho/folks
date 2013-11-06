@@ -242,6 +242,49 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
     }
 
   /**
+   * Delay for the given number of milliseconds.
+   *
+   * This implements an asynchronous delay (which should be yielded on) until
+   * the given number of milliseconds has elapsed.
+   *
+   * If ``delay`` is negative, this function returns immediately. If it is
+   * zero, this function returns in an idle callback.
+   *
+   * @param delay number of milliseconds to delay for
+   * @since UNRELEASED
+   */
+  private async void _implement_mock_delay (int delay)
+    {
+      if (delay < 0)
+        {
+          /* No delay. */
+          return;
+        }
+      else if (delay == 0)
+        {
+          /* Idle delay. */
+          Idle.add (() =>
+            {
+              this._implement_mock_delay.callback ();
+              return false;
+            });
+
+          yield;
+        }
+      else
+        {
+          /* Timed delay. */
+          Timeout.add (delay, () =>
+            {
+              this._implement_mock_delay.callback ();
+              return false;
+            });
+
+          yield;
+        }
+    }
+
+  /**
    * Type of a mock function for {@link PersonaStore.add_persona_from_details}.
    *
    * See {@link FolksDummy.PersonaStore.add_persona_from_details_mock}.
@@ -250,9 +293,12 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * the details passed to {@link PersonaStore.add_persona_from_details}.
    * @throws PersonaStoreError to be thrown from
    * {@link PersonaStore.add_persona_from_details}
+   * @returns delay to apply to the add persona operation (negative delays
+   * complete synchronously; zero delays complete in an idle callback; positive
+   * delays complete after that many milliseconds)
    * @since UNRELEASED
    */
-  public delegate void AddPersonaFromDetailsMock (Persona persona)
+  public delegate int AddPersonaFromDetailsMock (Persona persona)
       throws PersonaStoreError;
 
   /**
@@ -264,6 +310,12 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * throwing an error from this mock function. If no error is thrown from this
    * function, adding the given persona will succeed. This is useful for testing
    * error handling of calls to {@link PersoneStore.add_persona_from_details}.
+   *
+   * The value returned by this function gives a delay which is imposed for
+   * completion of the {@link PersonaStore.add_persona_from_details} call.
+   * Negative delays result in the call completing synchronously, zero delays
+   * result in completion in an idle callback, and positive delays result in
+   * completion after that many milliseconds.
    *
    * If this is ``null``, all calls to
    * {@link PersonaStore.add_persona_from_details} will succeed.
@@ -551,11 +603,13 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                 }
             }
         }
-      /* Allow the caller to inject failures into add_persona_from_details()
-       * by providing a mock function which can throw errors as appropriate. */
+
+      /* Allow the caller to inject failures and delays into
+       * add_persona_from_details() by providing a mock function. */
       if (this.add_persona_from_details_mock != null)
         {
-          this.add_persona_from_details_mock (persona);
+          var delay = this.add_persona_from_details_mock (persona);
+          yield this._implement_mock_delay (delay);
         }
 
       /* No simulated failure: continue adding the persona. */
@@ -577,9 +631,12 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * @param persona the persona being removed from the store
    * @throws PersonaStoreError to be thrown from
    * {@link PersonaStore.remove_persona}
+   * @returns delay to apply to the remove persona operation (negative delays
+   * complete synchronously; zero delays complete in an idle callback; positive
+   * delays complete after that many milliseconds)
    * @since UNRELEASED
    */
-  public delegate void RemovePersonaMock (Persona persona)
+  public delegate int RemovePersonaMock (Persona persona)
       throws PersonaStoreError;
 
   /**
@@ -591,6 +648,12 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * throwing an error from this mock function. If no error is thrown from this
    * function, removing the given persona will succeed. This is useful for
    * testing error handling of calls to {@link PersoneStore.remove_persona}.
+   *
+   * The value returned by this function gives a delay which is imposed for
+   * completion of the {@link PersonaStore.remove_persona} call.
+   * Negative delays result in the call completing synchronously, zero delays
+   * result in completion in an idle callback, and positive delays result in
+   * completion after that many milliseconds.
    *
    * If this is ``null``, all calls to {@link PersonaStore.remove_persona} will
    * succeed.
@@ -632,11 +695,11 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
               "Persona store has not yet been prepared.");
         }
 
-      /* Allow the caller to inject failures into remove_persona()
-       * by providing a mock function which can throw errors as appropriate. */
+      /* Allow the caller to inject failures and delays. */
       if (this.remove_persona_mock != null)
         {
-          this.remove_persona_mock ((FolksDummy.Persona) persona);
+          var delay = this.remove_persona_mock ((FolksDummy.Persona) persona);
+          yield this._implement_mock_delay (delay);
         }
 
       Persona? _persona = this._personas.get (persona.iid);
@@ -662,9 +725,12 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * See {@link FolksDummy.PersonaStore.prepare_mock}.
    *
    * @throws PersonaStoreError to be thrown from {@link PersonaStore.prepare}
+   * @returns delay to apply to the prepare operation (negative delays
+   * complete synchronously; zero delays complete in an idle callback; positive
+   * delays complete after that many milliseconds)
    * @since UNRELEASED
    */
-  public delegate void PrepareMock () throws PersonaStoreError;
+  public delegate int PrepareMock () throws PersonaStoreError;
 
   /**
    * Mock function for {@link PersonaStore.prepare}.
@@ -677,6 +743,12 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * {@link PersonaStore.prepare} will return immediately without calling this
    * mock function). This is useful for testing error handling of calls to
    * {@link PersoneStore.prepare}.
+   *
+   * The value returned by this function gives a delay which is imposed for
+   * completion of the {@link PersonaStore.prepare} call.
+   * Negative delays result in the call completing synchronously, zero delays
+   * result in completion in an idle callback, and positive delays result in
+   * completion after that many milliseconds.
    *
    * If this is ``null``, all calls to {@link PersonaStore.prepare} will
    * succeed.
@@ -718,11 +790,11 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
         {
           this._prepare_pending = true;
 
-          /* Allow the caller to inject failures into prepare() by providing a
-           * mock function which can throw errors as appropriate. */
+          /* Allow the caller to inject failures and delays. */
           if (this.prepare_mock != null)
             {
-              this.prepare_mock ();
+              var delay = this.prepare_mock ();
+              yield this._implement_mock_delay (delay);
             }
 
           this._is_prepared = true;
