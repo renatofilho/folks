@@ -203,7 +203,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
 
   /* Freeze counter for persona changes: personas-changed is only emitted when
    * this is 0. */
-  private uint _persona_changes_frozen = 0;
+  private uint _personas_changed_frozen = 0;
 
   /**
    * The {@link Persona}s exposed by this PersonaStore.
@@ -905,40 +905,41 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * Freeze persona changes in the store.
    *
    * This freezes externally-visible changes to the set of personas in the store
-   * until {@link PersonaStore.thaw_persona_changes} is called, at which point
+   * until {@link PersonaStore.thaw_personas_changed} is called, at which point
    * all pending changes are made visible in the {@link PersonaStore.personas}
    * property and by emitting {@link PersonaStore.personas_changed}.
    *
-   * Calls to {@link PersonaStore.freeze_persona_changes} and
-   * {@link PersonaStore.thaw_persona_changes} must be well-nested. Pending
+   * Calls to {@link PersonaStore.freeze_personas_changed} and
+   * {@link PersonaStore.thaw_personas_changed} must be well-nested. Pending
    * changes will only be committed after the final call to
-   * {@link PersonaStore.thaw_persona_changes}.
+   * {@link PersonaStore.thaw_personas_changed}.
    *
-   * @see PersonaStore.thaw_persona_changes
+   * @see PersonaStore.thaw_personas_changed
    * @since UNRELEASED
    */
-  public void freeze_persona_changes ()
+  public void freeze_personas_changed ()
     {
-      this._persona_changes_frozen++;
+      this._personas_changed_frozen++;
     }
 
   /**
    * Thaw persona changes in the store.
    *
    * This thaws externally-visible changes to the set of personas in the store.
-   * If the number of calls to {@link PersonaStore.thaw_persona_changes} matches
-   * the number of calls to {@link PersonaStore.freeze_persona_changes}, all
+   * If the number of calls to {@link PersonaStore.thaw_personas_changed}
+   * matches the number of calls to
+   * {@link PersonaStore.freeze_personas_changed}, all
    * pending changes are committed and made externally-visible.
    *
-   * @see PersonaStore.freeze_persona_changes
+   * @see PersonaStore.freeze_personas_changed
    * @since UNRELEASED
    */
-  public void thaw_persona_changes ()
+  public void thaw_personas_changed ()
     {
-      assert (this._persona_changes_frozen > 0);
-      this._persona_changes_frozen--;
+      assert (this._personas_changed_frozen > 0);
+      this._personas_changed_frozen--;
 
-      if (this._persona_changes_frozen == 0)
+      if (this._personas_changed_frozen == 0)
         {
           /* Emit the queued changes. */
           this._emit_personas_changed (this._pending_persona_registrations,
@@ -954,7 +955,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    *
    * This registers a set of personas as if they had just appeared in the
    * backing store. If the persona store is not frozen (see
-   * {@link PersonaStore.freeze_persona_changes}) the changes are made
+   * {@link PersonaStore.freeze_personas_changed}) the changes are made
    * externally visible on the store immediately (e.g. in the
    * {@link PersonaStore.personas} property and through a
    * {@link PersonaStore.personas_changed} signal). If the store is frozen, the
@@ -969,7 +970,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
   public void register_personas (Set<Persona> personas)
     {
       Set<Persona> added_personas;
-      var emit_notifications = (this._persona_changes_frozen == 0);
+      var emit_notifications = (this._personas_changed_frozen == 0);
 
       /* If the persona store has persona changes frozen, queue up the
        * personas and emit a notification about them later. */
@@ -1004,7 +1005,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    *
    * This unregisters a set of personas as if they had just disappeared from the
    * backing store. If the persona store is not frozen (see
-   * {@link PersonaStore.freeze_persona_changes}) the changes are made
+   * {@link PersonaStore.freeze_personas_changed}) the changes are made
    * externally visible on the store immediately (e.g. in the
    * {@link PersonaStore.personas} property and through a
    * {@link PersonaStore.personas_changed} signal). If the store is frozen, the
@@ -1016,7 +1017,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
   public void unregister_personas (Set<Persona> personas)
     {
       Set<Persona> removed_personas;
-      var emit_notifications = (this._persona_changes_frozen == 0);
+      var emit_notifications = (this._personas_changed_frozen == 0);
 
       /* If the persona store has persona changes frozen, queue up the
        * personas and emit a notification about them later. */
