@@ -38,6 +38,19 @@ using GLib;
  * backing store. Calls to these mock methods effect state changes in the store
  * which are visible in the normal libfolks API.
  *
+ * The main action performed with a dummy persona store is to change its set of
+ * personas, adding and removing them dynamically to test client-side behaviour.
+ * The client-side APIs ({@link PersonaStore.add_persona_from_details} and
+ * {@link PersonaStore.remove_persona}) should //not// be used for this.
+ * Instead, the mock APIs should be used:
+ * {@link FolksDummy.PersonaStore.freeze_personas_changed},
+ * {@link FolksDummy.PersonaStore.register_personas},
+ * {@link FolksDummy.PersonaStore.unregister_personas} and
+ * {@link FolksDummy.PersonaStore.thaw_personas_changed}. These can be used to
+ * build up complex {@link PersonaStore.personas_changed} signal emissions,
+ * which are only emitted after the final call to
+ * {@link FolksDummy.PersonaStore.thaw_personas_changed}.
+ *
  * The API in {@link FolksDummy} is unstable and may change wildly. It is
  * designed mostly for use by libfolks unit tests.
  *
