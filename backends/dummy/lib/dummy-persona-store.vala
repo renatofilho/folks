@@ -1061,10 +1061,16 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
               continue;
 
           removed_personas.add ((!) persona);
-          if (emit_notifications == true)
-              this._personas.unset (((!) persona).iid);
         }
 
+      if (emit_notifications == true)
+        {
+           foreach(var _persona in removed_personas)
+             {
+                this._personas.unset (((!) _persona).iid);
+             }
+         }
+       
        if (removed_personas.size > 0 && emit_notifications == true)
            this._emit_personas_changed (null, removed_personas);
     }
