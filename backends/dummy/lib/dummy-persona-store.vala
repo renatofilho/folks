@@ -54,9 +54,6 @@ using GLib;
  * The API in {@link FolksDummy} is unstable and may change wildly. It is
  * designed mostly for use by libfolks unit tests.
  *
- *
- * TODO: trust_level and is_user_set_default can be set as normal properties
- *
  * @since UNRELEASED
  */
 public class FolksDummy.PersonaStore : Folks.PersonaStore
@@ -1085,5 +1082,39 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
           this._is_quiescent = true;
           this.notify_property ("is-quiescent");
         }
+    }
+
+  /**
+   * Update the {@link PersonaStore.is_user_set_default} property.
+   *
+   * Backend method for use by test code to simulate a backing-store-driven
+   * change in the {@link PersonaStore.is_user_set_default} property.
+   *
+   * @param is_user_set_default new value for the property
+   *
+   * @since UNRELEASED
+   */
+  public void update_is_user_set_default (bool is_user_set_default)
+    {
+      /* Implemented as an ‘update_*()’ method to make it more explicit that
+       * this is for test driver use only. */
+      this.is_user_set_default = is_user_set_default;
+    }
+
+  /**
+   * Update the {@link PersonaStore.trust_level} property.
+   *
+   * Backend method for use by test code to simulate a backing-store-driven
+   * change in the {@link PersonaStore.trust_level} property.
+   *
+   * @param trust_level new value for the property
+   *
+   * @since UNRELEASED
+   */
+  public void update_trust_level (PersonaStoreTrust trust_level)
+    {
+      /* Implemented as an ‘update_*()’ method to make it more explicit that
+       * this is for test driver use only. */
+      this.trust_level = trust_level;
     }
 }
