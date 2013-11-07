@@ -59,7 +59,7 @@ public abstract class Folks.TestCase : Object
 
       if (Environment.get_variable ("FOLKS_TESTS_INSTALLED") == null)
         {
-          string[] locations = {              
+          string[] locations = {
               Folks.BuildConf.ABS_TOP_BUILDDIR + "/backends/key-file/.libs/key-file.so",
               Folks.BuildConf.ABS_TOP_BUILDDIR + "/backends/dummy/.libs/dummy.so",
           };
