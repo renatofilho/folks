@@ -79,7 +79,7 @@ public class DummyTest.TestCase : Folks.TestCase
         {
             try
               {
-                this.backend_store.load_backends.end (res);
+                this._backend_store.load_backends.end (res);
                 main_loop.quit ();
               }
             catch (GLib.Error e1)
@@ -92,7 +92,8 @@ public class DummyTest.TestCase : Folks.TestCase
 
       /* Grab the dummy backend. */
       this.dummy_backend =
-          (FolksDummy.Backend) this.backend_store.dup_backend_by_name ("dummy");
+          (FolksDummy.Backend)
+              this._backend_store.dup_backend_by_name ("dummy");
       assert (this.dummy_backend != null);
 
       this.configure_primary_store ();
