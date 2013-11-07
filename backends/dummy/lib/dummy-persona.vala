@@ -32,7 +32,8 @@ using GLib;
  * which implements all available interfaces.
  *
  * There are two sides to this class’ interface: the normal methods required by
- * {@link Folks.Persona}, such as {@link Persona.linkable_property_to_links},
+ * {@link Folks.Persona}, such as
+ * {@link Folks.Persona.linkable_property_to_links},
  * and the backend methods which should be called by test driver code to
  * simulate changes in the backing store providing this persona, such as
  * {@link FolksDummy.Persona.update_writeable_properties}.
@@ -75,13 +76,13 @@ public class FolksDummy.Persona : Folks.Persona
   /**
    * Create a new persona.
    *
-   * Create a new persona for the {@link PersonaStore} ``store``, with the given
-   * construct-only properties.
+   * Create a new persona for the {@link FolksDummy.PersonaStore} ``store``,
+   * with the given construct-only properties.
    *
-   * The persona’s {@link Persona.writeable_properties} are initialised to the
-   * given ``store``’s {@link PersonaStore.always_writeable_properties}. They
-   * may be updated afterwards using
-   * {@link FolksDummy.Persona.update_writeable_properties}.
+   * The persona’s {@link Folks.Persona.writeable_properties} are initialised to
+   * the given ``store``’s
+   * {@link Folks.PersonaStore.always_writeable_properties}. They may be updated
+   * afterwards using {@link FolksDummy.Persona.update_writeable_properties}.
    *
    * @param store the store which will contain the persona
    * @param contact_id a unique free-form string identifier for the persona
@@ -185,9 +186,9 @@ public class FolksDummy.Persona : Folks.Persona
   /**
    * Update the persona’s set of writeable properties.
    *
-   * Update the {@link Persona.writeable_properties} property to contain the
-   * union of {@link PersonaStore.always_writeable_properties} from the
-   * persona’s store, and the given ``writeable_properties``.
+   * Update the {@link Folks.Persona.writeable_properties} property to contain
+   * the union of {@link Folks.PersonaStore.always_writeable_properties} from
+   * the persona’s store, and the given ``writeable_properties``.
    *
    * This should be used to simulate a change in the backing store for the
    * persona which affects the writeability of one or more of its properties.
@@ -233,7 +234,7 @@ public class FolksDummy.Persona : Folks.Persona
    * Delay between property changes and notifications.
    *
    * This sets an optional delay between client code requesting a property
-   * change (e.g. by calling {@link NameDetails.change_nickname}) and the
+   * change (e.g. by calling {@link Folks.NameDetails.change_nickname}) and the
    * property change taking place and a {@link Object.notify} signal being
    * emitted for it.
    *
@@ -254,7 +255,8 @@ public class FolksDummy.Persona : Folks.Persona
    * This is called by {@link FolksDummy.Persona.change_property} after the
    * {@link FolksDummy.Persona.property_change_delay} has expired. It must
    * effect the property change in the simulated backing store, for example by
-   * calling an ‘update’ method such as {@link FatPersona.update_nickname}.
+   * calling an ‘update’ method such as
+   * {@link FolksDummy.FatPersona.update_nickname}.
    *
    * @since UNRELEASED
    */

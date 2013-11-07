@@ -40,15 +40,15 @@ using GLib;
  *
  * The main action performed with a dummy persona store is to change its set of
  * personas, adding and removing them dynamically to test client-side behaviour.
- * The client-side APIs ({@link PersonaStore.add_persona_from_details} and
- * {@link PersonaStore.remove_persona}) should //not// be used for this.
+ * The client-side APIs ({@link Folks.PersonaStore.add_persona_from_details} and
+ * {@link Folks.PersonaStore.remove_persona}) should //not// be used for this.
  * Instead, the mock APIs should be used:
  * {@link FolksDummy.PersonaStore.freeze_personas_changed},
  * {@link FolksDummy.PersonaStore.register_personas},
  * {@link FolksDummy.PersonaStore.unregister_personas} and
  * {@link FolksDummy.PersonaStore.thaw_personas_changed}. These can be used to
- * build up complex {@link PersonaStore.personas_changed} signal emissions,
- * which are only emitted after the final call to
+ * build up complex {@link Folks.PersonaStore.personas_changed} signal
+ * emissions, which are only emitted after the final call to
  * {@link FolksDummy.PersonaStore.thaw_personas_changed}.
  *
  * The API in {@link FolksDummy} is unstable and may change wildly. It is
@@ -709,15 +709,16 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
     }
 
   /**
-   * Type of a mock function for {@link PersonaStore.add_persona_from_details}.
+   * Type of a mock function for
+   * {@link Folks.PersonaStore.add_persona_from_details}.
    *
    * See {@link FolksDummy.PersonaStore.add_persona_from_details_mock}.
    *
    * @param persona the persona being added to the store, as constructed from
-   * the details passed to {@link PersonaStore.add_persona_from_details}.
+   * the details passed to {@link Folks.PersonaStore.add_persona_from_details}.
    * @throws PersonaStoreError to be thrown from
-   * {@link PersonaStore.add_persona_from_details}
-   * @returns delay to apply to the add persona operation (negative delays
+   * {@link Folks.PersonaStore.add_persona_from_details}
+   * @return delay to apply to the add persona operation (negative delays
    * complete synchronously; zero delays complete in an idle callback; positive
    * delays complete after that many milliseconds)
    *
@@ -727,26 +728,27 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
       throws PersonaStoreError;
 
   /**
-   * Mock function for {@link PersonaStore.add_persona_from_details}.
+   * Mock function for {@link Folks.PersonaStore.add_persona_from_details}.
    *
    * This function is called whenever this store's
-   * {@link PersonaStore.add_persona_from_details} method is called. It allows
-   * the caller to determine whether adding the given persona should fail, by
-   * throwing an error from this mock function. If no error is thrown from this
-   * function, adding the given persona will succeed. This is useful for testing
-   * error handling of calls to {@link PersoneStore.add_persona_from_details}.
+   * {@link Folks.PersonaStore.add_persona_from_details} method is called. It
+   * allows the caller to determine whether adding the given persona should
+   * fail, by throwing an error from this mock function. If no error is thrown
+   * from this function, adding the given persona will succeed. This is useful
+   * for testing error handling of calls to
+   * {@link Folks.PersonaStore.add_persona_from_details}.
    *
    * The value returned by this function gives a delay which is imposed for
-   * completion of the {@link PersonaStore.add_persona_from_details} call.
+   * completion of the {@link Folks.PersonaStore.add_persona_from_details} call.
    * Negative delays result in the call completing synchronously, zero delays
    * result in completion in an idle callback, and positive delays result in
    * completion after that many milliseconds.
    *
    * If this is ``null``, all calls to
-   * {@link PersonaStore.add_persona_from_details} will succeed.
+   * {@link Folks.PersonaStore.add_persona_from_details} will succeed.
    *
    * This mock function may be changed at any time; changes will take effect for
-   * the next call to {@link PersonaStore.add_persona_from_details}.
+   * the next call to {@link Folks.PersonaStore.add_persona_from_details}.
    *
    * @since UNRELEASED
    */
@@ -756,14 +758,14 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
     }
 
   /**
-   * Type of a mock function for {@link PersonaStore.remove_persona}.
+   * Type of a mock function for {@link Folks.PersonaStore.remove_persona}.
    *
    * See {@link FolksDummy.PersonaStore.remove_persona_mock}.
    *
    * @param persona the persona being removed from the store
    * @throws PersonaStoreError to be thrown from
-   * {@link PersonaStore.remove_persona}
-   * @returns delay to apply to the remove persona operation (negative delays
+   * {@link Folks.PersonaStore.remove_persona}
+   * @return delay to apply to the remove persona operation (negative delays
    * complete synchronously; zero delays complete in an idle callback; positive
    * delays complete after that many milliseconds)
    *
@@ -773,26 +775,27 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
       throws PersonaStoreError;
 
   /**
-   * Mock function for {@link PersonaStore.remove_persona}.
+   * Mock function for {@link Folks.PersonaStore.remove_persona}.
    *
    * This function is called whenever this store's
-   * {@link PersonaStore.remove_persona} method is called. It allows
+   * {@link Folks.PersonaStore.remove_persona} method is called. It allows
    * the caller to determine whether removing the given persona should fail, by
    * throwing an error from this mock function. If no error is thrown from this
    * function, removing the given persona will succeed. This is useful for
-   * testing error handling of calls to {@link PersoneStore.remove_persona}.
+   * testing error handling of calls to
+   * {@link Folks.PersonaStore.remove_persona}.
    *
    * The value returned by this function gives a delay which is imposed for
-   * completion of the {@link PersonaStore.remove_persona} call.
+   * completion of the {@link Folks.PersonaStore.remove_persona} call.
    * Negative delays result in the call completing synchronously, zero delays
    * result in completion in an idle callback, and positive delays result in
    * completion after that many milliseconds.
    *
-   * If this is ``null``, all calls to {@link PersonaStore.remove_persona} will
-   * succeed.
+   * If this is ``null``, all calls to {@link Folks.PersonaStore.remove_persona}
+   * will succeed.
    *
    * This mock function may be changed at any time; changes will take effect for
-   * the next call to {@link PersonaStore.remove_persona}.
+   * the next call to {@link Folks.PersonaStore.remove_persona}.
    *
    * @since UNRELEASED
    */
@@ -802,12 +805,13 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
     }
 
   /**
-   * Type of a mock function for {@link PersonaStore.prepare}.
+   * Type of a mock function for {@link Folks.PersonaStore.prepare}.
    *
    * See {@link FolksDummy.PersonaStore.prepare_mock}.
    *
-   * @throws PersonaStoreError to be thrown from {@link PersonaStore.prepare}
-   * @returns delay to apply to the prepare operation (negative delays
+   * @throws PersonaStoreError to be thrown from
+   * {@link Folks.PersonaStore.prepare}
+   * @return delay to apply to the prepare operation (negative delays
    * complete synchronously; zero delays complete in an idle callback; positive
    * delays complete after that many milliseconds)
    *
@@ -816,28 +820,28 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
   public delegate int PrepareMock () throws PersonaStoreError;
 
   /**
-   * Mock function for {@link PersonaStore.prepare}.
+   * Mock function for {@link Folks.PersonaStore.prepare}.
    *
    * This function is called whenever this store's
-   * {@link PersonaStore.prepare} method is called on an unprepared store. It
-   * allows the caller to determine whether preparing the store should fail, by
-   * throwing an error from this mock function. If no error is thrown from this
-   * function, preparing the store will succeed (and all future calls to
-   * {@link PersonaStore.prepare} will return immediately without calling this
-   * mock function). This is useful for testing error handling of calls to
-   * {@link PersoneStore.prepare}.
+   * {@link Folks.PersonaStore.prepare} method is called on an unprepared store.
+   * It allows the caller to determine whether preparing the store should fail,
+   * by throwing an error from this mock function. If no error is thrown from
+   * this function, preparing the store will succeed (and all future calls to
+   * {@link Folks.PersonaStore.prepare} will return immediately without calling
+   * this mock function). This is useful for testing error handling of calls to
+   * {@link Folks.PersonaStore.prepare}.
    *
    * The value returned by this function gives a delay which is imposed for
-   * completion of the {@link PersonaStore.prepare} call.
+   * completion of the {@link Folks.PersonaStore.prepare} call.
    * Negative delays result in the call completing synchronously, zero delays
    * result in completion in an idle callback, and positive delays result in
    * completion after that many milliseconds.
    *
-   * If this is ``null``, all calls to {@link PersonaStore.prepare} will
+   * If this is ``null``, all calls to {@link Folks.PersonaStore.prepare} will
    * succeed.
    *
    * This mock function may be changed at any time; changes will take effect for
-   * the next call to {@link PersonaStore.prepare}.
+   * the next call to {@link Folks.PersonaStore.prepare}.
    *
    * @since UNRELEASED
    */
@@ -852,12 +856,12 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * Type of programmatically created personas.
    *
    * This is the type used to create new personas when
-   * {@link PersonaStore.add_persona_from_details} is called. It must be a
+   * {@link Folks.PersonaStore.add_persona_from_details} is called. It must be a
    * subtype of {@link FolksDummy.Persona}.
    *
    * This may be modified at any time, with modifications taking effect for the
-   * next call to {@link PersonaStore.add_persona_from_details} or
-   * {@link PersonaStore.register_personas}.
+   * next call to {@link Folks.PersonaStore.add_persona_from_details} or
+   * {@link FolksDummy.PersonaStore.register_personas}.
    *
    * @since UNRELEASED
    */
@@ -880,9 +884,9 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    *
    * This sets the capabilities of the store, as if they were changed on a
    * backing store somewhere. This is intended to be used for testing code which
-   * depends on the values of {@link PersonaStore.can_add_personas},
-   * {@link PersonaStore.can_alias_personas} and
-   * {@link PersonaStore.can_remove_personas}.
+   * depends on the values of {@link Folks.PersonaStore.can_add_personas},
+   * {@link Folks.PersonaStore.can_alias_personas} and
+   * {@link Folks.PersonaStore.can_remove_personas}.
    *
    * @param can_add_personas whether the store can handle adding personas
    * @param can_alias_personas whether the store can handle and update
@@ -921,14 +925,15 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * Freeze persona changes in the store.
    *
    * This freezes externally-visible changes to the set of personas in the store
-   * until {@link PersonaStore.thaw_personas_changed} is called, at which point
-   * all pending changes are made visible in the {@link PersonaStore.personas}
-   * property and by emitting {@link PersonaStore.personas_changed}.
+   * until {@link FolksDummy.PersonaStore.thaw_personas_changed} is called, at
+   * which point all pending changes are made visible in the
+   * {@link Folks.PersonaStore.personas} property and by emitting
+   * {@link Folks.PersonaStore.personas_changed}.
    *
-   * Calls to {@link PersonaStore.freeze_personas_changed} and
-   * {@link PersonaStore.thaw_personas_changed} must be well-nested. Pending
-   * changes will only be committed after the final call to
-   * {@link PersonaStore.thaw_personas_changed}.
+   * Calls to {@link FolksDummy.PersonaStore.freeze_personas_changed} and
+   * {@link FolksDummy.PersonaStore.thaw_personas_changed} must be well-nested.
+   * Pending changes will only be committed after the final call to
+   * {@link FolksDummy.PersonaStore.thaw_personas_changed}.
    *
    * @see PersonaStore.thaw_personas_changed
    * @since UNRELEASED
@@ -942,9 +947,9 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * Thaw persona changes in the store.
    *
    * This thaws externally-visible changes to the set of personas in the store.
-   * If the number of calls to {@link PersonaStore.thaw_personas_changed}
-   * matches the number of calls to
-   * {@link PersonaStore.freeze_personas_changed}, all
+   * If the number of calls to
+   * {@link FolksDummy.PersonaStore.thaw_personas_changed} matches the number of
+   * calls to {@link FolksDummy.PersonaStore.freeze_personas_changed}, all
    * pending changes are committed and made externally-visible.
    *
    * @see PersonaStore.freeze_personas_changed
@@ -971,14 +976,14 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    *
    * This registers a set of personas as if they had just appeared in the
    * backing store. If the persona store is not frozen (see
-   * {@link PersonaStore.freeze_personas_changed}) the changes are made
-   * externally visible on the store immediately (e.g. in the
-   * {@link PersonaStore.personas} property and through a
-   * {@link PersonaStore.personas_changed} signal). If the store is frozen, the
-   * changes will be pending until the store is next unfrozen.
+   * {@link FolksDummy.PersonaStore.freeze_personas_changed}) the changes are
+   * made externally visible on the store immediately (e.g. in the
+   * {@link Folks.PersonaStore.personas} property and through a
+   * {@link Folks.PersonaStore.personas_changed} signal). If the store is
+   * frozen, the changes will be pending until the store is next unfrozen.
    *
    * All elements in the @personas set be of type
-   * {@link PersonaStore.persona_type}.
+   * {@link FolksDummy.PersonaStore.persona_type}.
    *
    * @param personas set of personas to register
    *
@@ -1022,11 +1027,11 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    *
    * This unregisters a set of personas as if they had just disappeared from the
    * backing store. If the persona store is not frozen (see
-   * {@link PersonaStore.freeze_personas_changed}) the changes are made
-   * externally visible on the store immediately (e.g. in the
-   * {@link PersonaStore.personas} property and through a
-   * {@link PersonaStore.personas_changed} signal). If the store is frozen, the
-   * changes will be pending until the store is next unfrozen.
+   * {@link FolksDummy.PersonaStore.freeze_personas_changed}) the changes are
+   * made externally visible on the store immediately (e.g. in the
+   * {@link Folks.PersonaStore.personas} property and through a
+   * {@link Folks.PersonaStore.personas_changed} signal). If the store is
+   * frozen, the changes will be pending until the store is next unfrozen.
    *
    * @param personas set of personas to unregister
    *
@@ -1066,11 +1071,11 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
   /**
    * Reach quiescence on the store.
    *
-   * If the {@link PersonaStore.prepare} method has already been called on the
-   * store, this causes the store to signal that it has reached quiescence
+   * If the {@link Folks.PersonaStore.prepare} method has already been called on
+   * the store, this causes the store to signal that it has reached quiescence
    * immediately. If the store has not yet been prepared, this will set a flag
    * to ensure that quiescence is reached as soon as
-   * {@link PersonaStore.prepare} is called.
+   * {@link Folks.PersonaStore.prepare} is called.
    *
    * @since UNRELEASED
    */
@@ -1093,10 +1098,10 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
     }
 
   /**
-   * Update the {@link PersonaStore.is_user_set_default} property.
+   * Update the {@link Folks.PersonaStore.is_user_set_default} property.
    *
    * Backend method for use by test code to simulate a backing-store-driven
-   * change in the {@link PersonaStore.is_user_set_default} property.
+   * change in the {@link Folks.PersonaStore.is_user_set_default} property.
    *
    * @param is_user_set_default new value for the property
    *
@@ -1110,10 +1115,10 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
     }
 
   /**
-   * Update the {@link PersonaStore.trust_level} property.
+   * Update the {@link Folks.PersonaStore.trust_level} property.
    *
    * Backend method for use by test code to simulate a backing-store-driven
-   * change in the {@link PersonaStore.trust_level} property.
+   * change in the {@link Folks.PersonaStore.trust_level} property.
    *
    * @param trust_level new value for the property
    *

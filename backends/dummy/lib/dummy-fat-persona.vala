@@ -38,7 +38,8 @@ using GLib;
  * option.
  *
  * There are two sides to this class’ interface: the normal methods required by
- * the libfolks ‘details’ interfaces, such as {@link FatPersona.change_gender},
+ * the libfolks ‘details’ interfaces, such as
+ * {@link Folks.GenderDetails.change_gender},
  * and the backend methods which should be called by test driver code to
  * simulate changes in the backing store providing this persona, such as
  * {@link FatPersona.update_gender}. For example, test driver code should call
@@ -71,8 +72,8 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
   /**
    * Create a new ‘fat’ persona.
    *
-   * Create a new persona for the {@link PersonaStore} ``store``, with the given
-   * construct-only properties.
+   * Create a new persona for the {@link FolksDummy.PersonaStore} ``store``,
+   * with the given construct-only properties.
    *
    * @param store the store which will contain the persona
    * @param contact_id a unique free-form string identifier for the persona
@@ -725,7 +726,7 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's gender.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link GenderDetails.gender} property. It is intended to be used for
+   * {@link Folks.GenderDetails.gender} property. It is intended to be used for
    * testing code which consumes this property. If the property value changes,
    * this results in a property change notification on the persona.
    *
@@ -745,9 +746,10 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's birthday calendar event ID.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link BirthdayDetails.calendar_event_id} property. It is intended to be
-   * used for testing code which consumes this property. If the property value
-   * changes, this results in a property change notification on the persona.
+   * {@link Folks.BirthdayDetails.calendar_event_id} property. It is intended to
+   * be used for testing code which consumes this property. If the property
+   * value changes, this results in a property change notification on the
+   * persona.
    *
    * @param calendar_event_id persona's new birthday calendar event ID
    * @since UNRELEASED
@@ -765,9 +767,9 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's birthday.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link BirthdayDetails.birthday} property. It is intended to be used for
-   * testing code which consumes this property. If the property value changes,
-   * this results in a property change notification on the persona.
+   * {@link Folks.BirthdayDetails.birthday} property. It is intended to be used
+   * for testing code which consumes this property. If the property value
+   * changes, this results in a property change notification on the persona.
    *
    * @param birthday persona's new birthday
    * @since UNRELEASED
@@ -787,7 +789,7 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's roles.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link RoleDetails.roles} property. It is intended to be used for
+   * {@link Folks.RoleDetails.roles} property. It is intended to be used for
    * testing code which consumes this property. If the property value changes,
    * this results in a property change notification on the persona.
    *
@@ -808,7 +810,7 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's groups.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link GroupDetails.groups} property. It is intended to be used for
+   * {@link Folks.GroupDetails.groups} property. It is intended to be used for
    * testing code which consumes this property. If the property value changes,
    * this results in a property change notification on the persona.
    *
@@ -829,10 +831,10 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's web service addresses.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link WebServiceDetails.web_service_addresses} property. It is intended to
-   * be used for testing code which consumes this property. If the property
-   * value changes, this results in a property change notification on the
-   * persona.
+   * {@link Folks.WebServiceDetails.web_service_addresses} property. It is
+   * intended to be used for testing code which consumes this property. If the
+   * property value changes, this results in a property change notification on
+   * the persona.
    *
    * @param web_service_addresses persona's new web service addresses
    * @since UNRELEASED
@@ -854,8 +856,8 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's e-mail addresses.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link EmailDetails.email_addresses} property. It is intended to be used
-   * for testing code which consumes this property. If the property value
+   * {@link Folks.EmailDetails.email_addresses} property. It is intended to be
+   * used for testing code which consumes this property. If the property value
    * changes, this results in a property change notification on the persona.
    *
    * @param email_addresses persona's new e-mail addresses
@@ -877,7 +879,7 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's notes.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link NoteDetails.notes} property. It is intended to be used for
+   * {@link Folks.NoteDetails.notes} property. It is intended to be used for
    * testing code which consumes this property. If the property value changes,
    * this results in a property change notification on the persona.
    *
@@ -898,7 +900,7 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's full name.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link NameDetails.full_name} property. It is intended to be used for
+   * {@link Folks.NameDetails.full_name} property. It is intended to be used for
    * testing code which consumes this property. If the property value changes,
    * this results in a property change notification on the persona.
    *
@@ -918,7 +920,7 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's nickname.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link NameDetails.nickname} property. It is intended to be used for
+   * {@link Folks.NameDetails.nickname} property. It is intended to be used for
    * testing code which consumes this property. If the property value changes,
    * this results in a property change notification on the persona.
    *
@@ -938,9 +940,9 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's structured name.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link NameDetails.structured_name} property. It is intended to be used for
-   * testing code which consumes this property. If the property value changes,
-   * this results in a property change notification on the persona.
+   * {@link Folks.NameDetails.structured_name} property. It is intended to be
+   * used for testing code which consumes this property. If the property value
+   * changes, this results in a property change notification on the persona.
    *
    * @param structured_name persona's new structured name
    * @since UNRELEASED
@@ -963,7 +965,7 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's avatar.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link AvatarDetails.avatar} property. It is intended to be used for
+   * {@link Folks.AvatarDetails.avatar} property. It is intended to be used for
    * testing code which consumes this property. If the property value changes,
    * this results in a property change notification on the persona.
    *
@@ -985,7 +987,7 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's URIs.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link UrlDetails.urls} property. It is intended to be used for
+   * {@link Folks.UrlDetails.urls} property. It is intended to be used for
    * testing code which consumes this property. If the property value changes,
    * this results in a property change notification on the persona.
    *
@@ -1006,9 +1008,9 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's IM addresses.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link ImDetails.im_addresses} property. It is intended to be used for
-   * testing code which consumes this property. If the property value changes,
-   * this results in a property change notification on the persona.
+   * {@link Folks.ImDetails.im_addresses} property. It is intended to be used
+   * for testing code which consumes this property. If the property value
+   * changes, this results in a property change notification on the persona.
    *
    * @param im_addresses persona's new IM addresses
    * @since UNRELEASED
@@ -1030,9 +1032,9 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's phone numbers.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link PhoneDetails.phone_numbers} property. It is intended to be used for
-   * testing code which consumes this property. If the property value changes,
-   * this results in a property change notification on the persona.
+   * {@link Folks.PhoneDetails.phone_numbers} property. It is intended to be
+   * used for testing code which consumes this property. If the property value
+   * changes, this results in a property change notification on the persona.
    *
    * @param phone_numbers persona's new phone numbers
    * @since UNRELEASED
@@ -1053,10 +1055,10 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's postal addresses.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link PostalAddressDetails.postal_addresses} property. It is intended to
-   * be used for testing code which consumes this property. If the property
-   * value changes, this results in a property change notification on the
-   * persona.
+   * {@link Folks.PostalAddressDetails.postal_addresses} property. It is
+   * intended to be used for testing code which consumes this property. If the
+   * property value changes, this results in a property change notification on
+   * the persona.
    *
    * @param postal_addresses persona's new postal addresses
    * @since UNRELEASED
@@ -1079,9 +1081,9 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's local IDs.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link LocalIdDetails.local_ids} property. It is intended to be used for
-   * testing code which consumes this property. If the property value changes,
-   * this results in a property change notification on the persona.
+   * {@link Folks.LocalIdDetails.local_ids} property. It is intended to be used
+   * for testing code which consumes this property. If the property value
+   * changes, this results in a property change notification on the persona.
    *
    * @param local_ids persona's new local IDs
    * @since UNRELEASED
@@ -1103,8 +1105,8 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's status as a favourite.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link FavouriteDetails.is_favourite} property. It is intended to be used
-   * for testing code which consumes this property. If the property value
+   * {@link Folks.FavouriteDetails.is_favourite} property. It is intended to be
+   * used for testing code which consumes this property. If the property value
    * changes, this results in a property change notification on the persona.
    *
    * @param is_favourite persona's new status as a favourite
@@ -1123,9 +1125,9 @@ public class FolksDummy.FatPersona : FolksDummy.Persona,
    * Update persona's anti-links.
    *
    * This simulates a backing-store-side update of the persona's
-   * {@link AntiLinkable.anti_links} property. It is intended to be used for
-   * testing code which consumes this property. If the property value changes,
-   * this results in a property change notification on the persona.
+   * {@link Folks.AntiLinkable.anti_links} property. It is intended to be used
+   * for testing code which consumes this property. If the property value
+   * changes, this results in a property change notification on the persona.
    *
    * @param anti_links persona's new anti-links
    * @since UNRELEASED
