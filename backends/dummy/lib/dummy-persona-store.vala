@@ -281,6 +281,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    *
    * See {@link Folks.PersonaStore.add_persona_from_details}.
    *
+   * @param details key–value pairs giving the new persona’s details
    * @throws Folks.PersonaStoreError.STORE_OFFLINE if the store hasn’t been
    * prepared
    * @throws Folks.PersonaStoreError.CREATE_FAILED if creating the persona in
@@ -673,6 +674,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * zero, this function returns in an idle callback.
    *
    * @param delay number of milliseconds to delay for
+   *
    * @since UNRELEASED
    */
   private async void _implement_mock_delay (int delay)
@@ -718,6 +720,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * @returns delay to apply to the add persona operation (negative delays
    * complete synchronously; zero delays complete in an idle callback; positive
    * delays complete after that many milliseconds)
+   *
    * @since UNRELEASED
    */
   public delegate int AddPersonaFromDetailsMock (Persona persona)
@@ -763,6 +766,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * @returns delay to apply to the remove persona operation (negative delays
    * complete synchronously; zero delays complete in an idle callback; positive
    * delays complete after that many milliseconds)
+   *
    * @since UNRELEASED
    */
   public delegate int RemovePersonaMock (Persona persona)
@@ -806,6 +810,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * @returns delay to apply to the prepare operation (negative delays
    * complete synchronously; zero delays complete in an idle callback; positive
    * delays complete after that many milliseconds)
+   *
    * @since UNRELEASED
    */
   public delegate int PrepareMock () throws PersonaStoreError;
@@ -883,6 +888,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * @param can_alias_personas whether the store can handle and update
    * user-specified persona aliases
    * @param can_remove_personas whether the store can handle removing personas
+   *
    * @since UNRELEASED
    */
   public void set_capabilities (MaybeBool can_add_personas,
@@ -975,6 +981,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * {@link PersonaStore.persona_type}.
    *
    * @param personas set of personas to register
+   *
    * @since UNRELEASED
    */
   public void register_personas (Set<Persona> personas)
@@ -1022,6 +1029,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
    * changes will be pending until the store is next unfrozen.
    *
    * @param personas set of personas to unregister
+   *
    * @since UNRELEASED
    */
   public void unregister_personas (Set<Persona> personas)
