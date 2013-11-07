@@ -340,7 +340,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                     {
                       _full_name = (!) full_name;
                     }
-                  _persona.full_name = _full_name;
+                  yield _persona.change_full_name (_full_name);
                 }
             }
           else if (k == Folks.PersonaStore.detail_key (
@@ -353,8 +353,8 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                       (Set<EmailFieldDetails>) v.get_object ();
                   if (email_addresses != null)
                     {
-                      _persona.email_addresses =  email_addresses;
-                    }             
+                      yield _persona.change_email_addresses (email_addresses);
+                    }
                 }
             }
           else if (k == Folks.PersonaStore.detail_key (PersonaDetail.AVATAR))
@@ -365,7 +365,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                   var avatar = (LoadableIcon?) v.get_object ();
                   if (avatar != null)
                     {
-                      _persona.avatar = avatar;
+                      yield _persona.change_avatar (avatar);
                     }
                 }
             }
@@ -379,7 +379,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                     (MultiMap<string,ImFieldDetails>) v.get_object ();
                   if (im_addresses != null)
                     {
-                      _persona.im_addresses = im_addresses;
+                      yield _persona.change_im_addresses (im_addresses);
                     }
                 }
             }
@@ -393,7 +393,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                     (Set<PhoneFieldDetails>) v.get_object ();
                   if (phone_numbers != null)
                     {
-                      _persona.phone_numbers = phone_numbers;
+                      yield _persona.change_phone_numbers (phone_numbers);
                     }
                 }
             }
@@ -407,7 +407,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                     (Set<PostalAddressFieldDetails>) v.get_object ();
                   if (postal_fds != null)
                     {
-                      _persona.postal_addresses = postal_fds;
+                      yield _persona.change_postal_addresses (postal_fds);
                     }
                 }
             }
@@ -420,7 +420,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                   StructuredName sname = (StructuredName) v.get_object ();
                   if (sname != null)
                     {
-                      _persona.structured_name = sname;
+                      yield _persona.change_structured_name (sname);
                     }
                 }
             }
@@ -432,7 +432,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                   Set<string> local_ids = (Set<string>) v.get_object ();
                   if (local_ids != null)
                     {
-                      _persona.local_ids = local_ids;
+                      yield _persona.change_local_ids (local_ids);
                     }
                 }
             }
@@ -446,7 +446,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                       (HashMultiMap<string, WebServiceFieldDetails>) v.get_object ();
                   if (web_service_addresses != null)
                     {
-                      _persona.web_service_addresses = web_service_addresses;
+                      yield _persona.change_web_service_addresses (web_service_addresses);
                     }
                 }
             }
@@ -458,7 +458,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                   var notes = (Gee.HashSet<NoteFieldDetails>) v.get_object ();
                   if (notes != null)
                     {
-                      _persona.notes = notes;
+                      yield _persona.change_notes (notes);
                     }
                 }
             }
@@ -468,7 +468,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
               if (_persona != null)
                 {
                   var gender = (Gender) v.get_enum ();
-                  _persona.gender = gender;
+                  yield _persona.change_gender (gender);
                 }
             }
           else if (k == Folks.PersonaStore.detail_key (PersonaDetail.URLS))
@@ -479,7 +479,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                   Set<UrlFieldDetails> urls = (Set<UrlFieldDetails>) v.get_object ();
                   if (urls != null)
                     {
-                      _persona.urls = urls;
+                      yield _persona.change_urls (urls);
                     }
                 }
             }
@@ -491,7 +491,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                   var birthday = (DateTime?) v.get_boxed ();
                   if (birthday != null)
                     {
-                      _persona.birthday = birthday;
+                      yield _persona.change_birthday (birthday);
                     }
                 }
             }
@@ -504,7 +504,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                       (Set<RoleFieldDetails>) v.get_object ();
                   if (roles != null)
                     {
-                      _persona.roles = roles;
+                      yield _persona.change_roles (roles);
                     }
                 }
             }
@@ -515,7 +515,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
               if (_persona != null)
                 {
                   bool is_fav = v.get_boolean ();
-                  _persona.is_favourite = is_fav;
+                  yield _persona.change_is_favourite (is_fav);
                 }
             }
           else if (k == Folks.PersonaStore.detail_key (
@@ -530,7 +530,7 @@ public class FolksDummy.PersonaStore : Folks.PersonaStore
                     {
                       _nickname = (!) nickname;
                     }
-                  _persona.nickname = _nickname;
+                  yield _persona.change_nickname (_nickname);
                 }
             }
         }
