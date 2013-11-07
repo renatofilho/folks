@@ -1,5 +1,6 @@
 /* test-case.vala
  *
+ * Copyright © 2013 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,6 +18,7 @@
  *
  * Author:
  *      Renato Araujo Oliveira Filho <renato@canonical.com>
+ *      Philip Withnall <philip.withnall@collabora.co.uk>
  */
 
 using Folks;
@@ -25,21 +27,34 @@ using Gee;
 /**
  * A test case for the dummy backend, which is configured as the
  * primary store and as the only backend allowed.
+ *
+ * @since UNRELEASED
  */
 public class DummyTest.TestCase : Folks.TestCase
 {
+  private BackendStore _backend_store;
+
   /**
    * The dummy test backend.
+   *
+   * @since UNRELEASED
    */
   public FolksDummy.Backend dummy_backend;
 
   /**
-   * The default persona store
+   * The default dummy persona store.
+   *
+   * @since UNRELEASED
    */
   public FolksDummy.PersonaStore dummy_persona_store;
 
-  private BackendStore backend_store;
-
+  /**
+   * Create a new dummy test case.
+   *
+   * @param name test case name
+   *
+   * @since UNRELEASED
+   */
   public TestCase (string name)
     {
       base (name);
@@ -48,50 +63,78 @@ public class DummyTest.TestCase : Folks.TestCase
       Environment.set_variable ("FOLKS_PRIMARY_STORE", "dummy", true);
     }
 
+  /**
+   * {@inheritDoc}
+   *
+   * @since UNRELEASED
+   */
   public override void set_up ()
     {
       base.set_up ();
 
       var main_loop = new GLib.MainLoop (null, false);
-      this.backend_store = BackendStore.dup();
-      this.backend_store.load_backends.begin((obj, res) => 
+
+      this._backend_store = BackendStore.dup ();
+      this._backend_store.load_backends.begin ((obj, res) =>
         {
-            try 
+            try
               {
-                this.backend_store.load_backends.end(res);
+                this.backend_store.load_backends.end (res);
                 main_loop.quit ();
               }
-            catch (GLib.Error error)
+            catch (GLib.Error e1)
               {
-                GLib.critical("Fail to initialized backend store.\n");
-                assert_not_reached ();
-              } 
+                error ("Failed to initialise backend store: %s", e1.message);
+              }
         });
+
       TestUtils.loop_run_with_timeout (main_loop);
 
-      this.dummy_backend = this.backend_store.dup_backend_by_name ("dummy") as FolksDummy.Backend;
+      /* Grab the dummy backend. */
+      this.dummy_backend =
+          (FolksDummy.Backend) this.backend_store.dup_backend_by_name ("dummy");
+      assert (this.dummy_backend != null);
+
       this.configure_primary_store ();
     }
 
+  /**
+   * {@inheritDoc}
+   *
+   * @since UNRELEASED
+   */
   public virtual void configure_primary_store ()
     {
-      var persona_stores = new HashSet<PersonaStore>();
-      string[] writable_properties = { Folks.PersonaStore.detail_key (PersonaDetail.BIRTHDAY),
+      string[] writable_properties =
+        {
+          Folks.PersonaStore.detail_key (PersonaDetail.BIRTHDAY),
           Folks.PersonaStore.detail_key (PersonaDetail.EMAIL_ADDRESSES),
           Folks.PersonaStore.detail_key (PersonaDetail.PHONE_NUMBERS),
-          null };
+          null
+        };
 
-      this.dummy_persona_store = new FolksDummy.PersonaStore ("dummy-store", "Dummy personas", writable_properties);
+      /* Create a new persona store. */
+      this.dummy_persona_store =
+          new FolksDummy.PersonaStore ("dummy-store", "Dummy personas",
+              writable_properties);
       this.dummy_persona_store.persona_type = typeof (FolksDummy.FatPersona);
 
+      /* Register it with the backend. */
+      var persona_stores = new HashSet<PersonaStore> ();
       persona_stores.add (this.dummy_persona_store);
       this.dummy_backend.register_persona_stores (persona_stores);
     }
 
+  /**
+   * {@inheritDoc}
+   *
+   * @since UNRELEASED
+   */
   public override void tear_down ()
     {
       this.dummy_persona_store = null;
       this.dummy_backend = null;
+      this._backend_store = null;
       base.tear_down ();
     }
 }
