@@ -27,12 +27,20 @@ using GLib;
 /**
  * A persona store which allows {@link FolksDummy.Persona}s to be
  * programmatically created and manipulated, for the purposes of testing the
- * core of libfolks itself.
+ * core of libfolks itself. This should not be used in user-visible
+ * applications.
  *
- * TODO: Mock functions
- * TODO: Unstable API
+ * There are two sides to this class’ interface: the methods and properties
+ * declared by {@link Folks.PersonaStore}, which form the normal libfolks
+ * persona store API; and the mock methods and properties (such as
+ * {@link FolksDummy.PersonaStore.add_persona_from_details_mock}) which are
+ * intended to be used by test driver code to simulate the behaviour of a real
+ * backing store. Calls to these mock methods effect state changes in the store
+ * which are visible in the normal libfolks API.
  *
- * TODO
+ * The API in {@link FolksDummy} is unstable and may change wildly. It is
+ * designed mostly for use by libfolks unit tests.
+ *
  *
  * TODO: trust_level and is_user_set_default can be set as normal properties
  *

@@ -45,6 +45,9 @@ using GLib;
  * {@link FatPersona.update_nickname} to simulate the user editing a contact’s
  * nickname in an online address book which is being exposed to libfolks.
  *
+ * The API in {@link FolksDummy} is unstable and may change wildly. It is
+ * designed mostly for use by libfolks unit tests.
+ *
  * @since UNRELEASED
  */
 public class FolksDummy.FatPersona : FolksDummy.Persona,

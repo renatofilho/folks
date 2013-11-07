@@ -44,6 +44,9 @@ extern const string BACKEND_NAME;
  * {@link Backend.enable_persona_store}, {@link Backend.disable_persona_store}
  * and {@link Backend.set_persona_stores}.
  *
+ * The API in {@link FolksDummy} is unstable and may change wildly. It is
+ * designed mostly for use by libfolks unit tests.
+ *
  * @since UNRELEASED
  */
 public class FolksDummy.Backend : Folks.Backend

@@ -41,6 +41,9 @@ using GLib;
  * {@link FolksDummy.Persona} have a configurable delay before taking effect,
  * which can be controlled by {@link FolksDummy.Persona.property_change_delay}.
  *
+ * The API in {@link FolksDummy} is unstable and may change wildly. It is
+ * designed mostly for use by libfolks unit tests.
+ *
  * @since UNRELEASED
  */
 public class FolksDummy.Persona : Folks.Persona
